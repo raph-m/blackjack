@@ -8,7 +8,7 @@ class Deck:
     def __init__(self, number_of_decks=6, shuffle_every=78, seed=10):
         self.number_of_decks = number_of_decks
         self.shuffle_every = shuffle_every
-        self.index = self.shuffle_every + 1
+        self.index = 5
         self.cards = color
         np.random.seed(seed)
 

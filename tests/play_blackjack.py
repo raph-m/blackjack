@@ -1,3 +1,7 @@
+import os
+cwd = os.getcwd()
+print(cwd)
+
 from environment.dealer import Dealer
 from util.tools import get_score
 
@@ -54,4 +58,4 @@ def shuffle(n):
             counter = 0
 
 
-
+play(10)
