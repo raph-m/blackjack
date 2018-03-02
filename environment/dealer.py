@@ -1,19 +1,21 @@
 import numpy as np
-
 from util.tools import get_score
 
 color = np.arange(1, 14, 1, dtype="int")
 
 
 class Deck:
-    def __init__(self, number_of_decks=6, shuffle_every=78):
+    def __init__(self, number_of_decks=6, shuffle_every=78, seed=10):
         self.number_of_decks = number_of_decks
         self.shuffle_every = shuffle_every
         self.index = self.shuffle_every + 1
         self.cards = color
+        np.random.seed(seed)
 
         for i in range(self.number_of_decks * 4 - 1):
             self.cards = np.append(self.cards, color)
+
+        self.shuffle()
 
     def shuffle(self):
         np.random.shuffle(self.cards)
@@ -32,8 +34,8 @@ class Deck:
 
 
 class Dealer:
-    def __init__(self, number_of_players=1, number_of_decks=6, shuffle_every=78):
-        self.deck = Deck(number_of_decks, shuffle_every)
+    def __init__(self, number_of_players=1, number_of_decks=6, shuffle_every=78, seed=10):
+        self.deck = Deck(number_of_decks, shuffle_every, seed=seed)
         self.shuffle_every = shuffle_every
         self.number_of_decks = number_of_decks
         self.number_of_players = number_of_players
@@ -56,6 +58,7 @@ class Dealer:
             self.deck.shuffle()
 
     def reset(self):
+        self.shuffle_if_needed()
         self.hands = {}
         self.dealer_cards = []
         self.doubled_hands = {}
@@ -154,7 +157,12 @@ class Dealer:
                 current.append(self.evaluate(i, j))
             self.hand_rewards[i] = current
 
+        shuffle = False
+        if self.deck.index > self.shuffle_every:
+            shuffle = True
+
         return {
+            "shuffle": shuffle,
             "done": True,
             "dealer_hand": self.dealer_cards,
             "dealer_score": self.dealer_score,

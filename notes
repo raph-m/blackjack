@@ -2,3 +2,9 @@ l'environnement est déjà écrit. Il a quelques trucs à vérifier et il faut c
 
 Le script play_blackjack permet de tester l'environnement en jouant au blackjack.
 
+prochaines étapes:
+- finir de coder l'environnement (débugger, commenter le code)
+- faire une première stratégie de base (s'arrêter si le compte est supérieur à k) et chercher le meilleur k pour faire cette stratégie.
+- chercher la stratégie idéale en fonction des cartes du joueur et des cartes du croupier
+- chercher dans quel cas on a une espérance positive (à quel moment peut on considérer que la table est chaude ?)
+- chercher si en jouant en comptant les cartes on peut obtenir une espérance positive et si oui pour quelle valeur du compte
