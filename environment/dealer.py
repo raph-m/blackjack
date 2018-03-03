@@ -2,6 +2,7 @@ import numpy as np
 
 from util.tools import get_score
 from strategies.counters import NoCounter
+from util.tools import is_soft_17
 color = np.arange(1, 14, 1, dtype="int")
 
 
@@ -79,6 +80,7 @@ class Dealer:
         for i in range(self.number_of_players):
             self.hands[i] = [[self.deck.next_card()]]
         for i in range(self.number_of_players):
+            # TODO: check that this is the way to do this
             self.hands[i][0].append(self.deck.next_card())
 
         self.dealer_cards.append(self.deck.next_card())
@@ -109,6 +111,7 @@ class Dealer:
     def hit(self, player_id, hand_id):
         self.hands[player_id][hand_id].append(self.deck.next_card())
         score = get_score(self.hands[player_id][hand_id])
+        # TODO: remplacer par score in [0, 21, 22] ?
         return score in [0, 22]
 
     def split(self, player_id, hand_id):
@@ -124,7 +127,7 @@ class Dealer:
             raise ValueError("you should have exactly two cards to be able to split")
 
         try:
-            if self.hands[player_id][hand_id][0] < 10 and self.hands[player_id][hand_id][1] < 10:
+            if self.hands[player_id][hand_id][0] < 10 or self.hands[player_id][hand_id][1] < 10:
                 assert self.hands[player_id][hand_id][0] == self.hands[player_id][hand_id][1]
         except AssertionError:
             raise ValueError("you should have a double in order to split")
@@ -145,10 +148,13 @@ class Dealer:
         x = 2 if doubled else 1
         player_score = get_score(self.hands[player_id][hand_id])
 
+        if player_score == 22 and len(self.hands[player_id]) >= 2:
+            player_score = 21
+
         if player_score == 0:
             return -x
         if player_score == 22 and self.dealer_score < 22:
-            return 2 * x
+            return 1.5 * x
         if self.dealer_score > player_score:
             return -x
         if self.dealer_score == player_score:
@@ -156,7 +162,7 @@ class Dealer:
         return x
 
     def results(self):
-        while get_score(self.dealer_cards) < 17 and get_score(self.dealer_cards) != 0:
+        while 0 < get_score(self.dealer_cards) < 17 or is_soft_17(self.dealer_cards):
             self.dealer_cards.append(self.deck.next_card())
 
         self.dealer_score = get_score(self.dealer_cards)
@@ -215,7 +221,6 @@ class Dealer:
                     return self.results()
             else:
                 self.hand_playing += 1
-
 
         return {
             "done": False,

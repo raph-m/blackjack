@@ -1,13 +1,9 @@
-import os
-cwd = os.getcwd()
-print(cwd)
-
 from environment.dealer import Dealer
 from util.tools import get_score
 
 action_space = ["hit", "stick", "double", "split"]
 
-dealer = Dealer(seed=420)
+dealer = Dealer(seed=1)
 
 
 def play(n):

@@ -75,6 +75,13 @@ def encoding(player, dealer, can_split=True):
     return "soft."+str(player_score)+"."+dealer_encoding
 
 
+def is_soft_17(cards):
+    if get_score(cards) == 17:
+        if get_value(cards) < get_score(cards):
+            return True
+    return False
+
+
 def check_encoding():
     assert encoding([1, 1, 1], [8]) == "soft.13.8"
     assert encoding([10, 1, 1], [12]) == "hard.12.10"

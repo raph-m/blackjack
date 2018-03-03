@@ -136,17 +136,29 @@ def simple_play(dealer, strategy):
     """
     une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
     """
-    res = dealer.reset()
+    interesting = False
+    res = dealer.reset_completely()
     while not res["done"]:
+
         player_playing = res["player_playing"]
         hand_playing = res["hand_playing"]
         dealer_cards = res["dealer_cards"]
         hand = res["hands"][player_playing][hand_playing]
+        #
+        # if hand == [1, 1]:
+        #     interesting = True
+
         can_split = len(res["hands"][player_playing]) == 1
         action = choose_action(hand, dealer_cards, strategy=strategy, can_split=can_split)
+        # if interesting:
+        #     print(hand)
+        #     print(action)
+        #     print(res)
         res = dealer.step(action)
+    # if interesting:
+    #     print(res)
     rewards = res["rewards"][0]
-    return np.sum(rewards)
+    return np.mean(rewards)
 
 
 def expectancy(strategy, n):
@@ -155,7 +167,7 @@ def expectancy(strategy, n):
     :param n: (int) nombre d'essais
     :return: (float) l'espérance de cette stratégie
     """
-    dealer = Dealer(seed=15)
+    dealer = Dealer(seed=300)
     total = 0.0
     for i in range(n):
         total += simple_play(dealer, strategy)
@@ -207,5 +219,7 @@ def plot_counter(n):
     plt.scatter(ks, vs)
     plt.show()
 
-# print(expectancy({"name": "basic"}, 1000000))
-best_naive_strategy(1000000)
+# best_naive_strategy(100000)
+print(expectancy({"name": "basic"}, 1000000))
+# plot_counter(100000)
+
