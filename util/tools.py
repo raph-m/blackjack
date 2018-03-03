@@ -54,3 +54,29 @@ def get_score(cards):
         return 22
 
     return max_score
+
+
+def encoding(player, dealer, can_split=True):
+    dealer_encoding = str(get_value(dealer))
+
+    if len(player) == 2 and can_split:
+        if player[0] == player[1] or (player[0] >= 10 and player[1] >= 10):
+            value = min(10, player[0])
+            return "pair."+str(value)+"."+dealer_encoding
+
+    player_score = get_score(player)
+    if get_value(player) == player_score:
+        return "hard."+str(player_score)+"."+dealer_encoding
+
+    return "soft."+str(player_score)+"."+dealer_encoding
+
+
+def check_encoding():
+    assert encoding([1, 1, 1], [8]) == "soft.13.8"
+    assert encoding([10, 1, 1], [12]) == "hard.12.10"
+    assert encoding([13, 12, 1], [1]) == "hard.21.1"
+    assert encoding([13, 8, 1], [1]) == "hard.19.1"
+    assert encoding([13, 11], [1]) == "pair.10.1"
+    assert encoding([7, 7], [1]) == "pair.7.1"
+
+check_encoding()

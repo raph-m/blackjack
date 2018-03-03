@@ -29,3 +29,6 @@ Boite à idées:
 
 Stratégie naive:
 - la meilleure stratégie naive est de rester dès que le score est strictement plus grand que 16 et tirer sinon.
+
+J'ai hardcoder la stratégie de base. Le pb c'est que quand je la teste j'ai une espérance positive.
+Donc sûrement un problème avec l'environnment ou bien dans mon code qui s'occupe de calculer l'espérance. Je sais pas d'où ça vient ...

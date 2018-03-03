@@ -112,6 +112,12 @@ class Dealer:
         return score in [0, 22]
 
     def split(self, player_id, hand_id):
+
+        try:
+            assert len(self.hands[player_id]) == 1
+        except AssertionError:
+            raise ValueError("you can't split more than once")
+
         try:
             assert len(self.hands[player_id][hand_id]) == 2
         except AssertionError:
@@ -123,6 +129,8 @@ class Dealer:
         except AssertionError:
             raise ValueError("you should have a double in order to split")
 
+        ass_pair = self.hands[player_id][hand_id][0] == 1
+
         value = self.hands[player_id][hand_id][0]
 
         self.hands[player_id][hand_id] = [value]
@@ -130,8 +138,7 @@ class Dealer:
 
         served = self.hit(player_id, hand_id)
         self.hit(player_id, len(self.hands[player_id]) - 1)
-
-        return served
+        return served, ass_pair
 
     def evaluate(self, player_id, hand_id):
         doubled = hand_id in self.doubled_hands[player_id]
@@ -150,7 +157,6 @@ class Dealer:
 
     def results(self):
         while get_score(self.dealer_cards) < 17 and get_score(self.dealer_cards) != 0:
-            # TODO: vérifier si c'est bien ça la règle
             self.dealer_cards.append(self.deck.next_card())
 
         self.dealer_score = get_score(self.dealer_cards)
@@ -192,7 +198,13 @@ class Dealer:
             served = True
 
         if action == "split":
-            served = self.split(self.player_playing, self.hand_playing)
+            served, ass_pair = self.split(self.player_playing, self.hand_playing)
+
+            if ass_pair:
+                self.player_playing += 1
+                self.hand_playing = 0
+                if self.player_playing >= self.number_of_players:
+                    return self.results()
 
         if served:
             if len(self.hands[self.player_playing]) - 1 == self.hand_playing:
@@ -203,6 +215,7 @@ class Dealer:
                     return self.results()
             else:
                 self.hand_playing += 1
+
 
         return {
             "done": False,

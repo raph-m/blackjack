@@ -7,7 +7,7 @@ from util.tools import get_score
 
 action_space = ["hit", "stick", "double", "split"]
 
-dealer = Dealer(seed=0)
+dealer = Dealer(seed=420)
 
 
 def play(n):
