@@ -2,6 +2,7 @@ import numpy as np
 
 from util.tools import get_score
 from strategies.counters import NoCounter
+from util.tools import is_soft_17
 color = np.arange(1, 14, 1, dtype="int")
 
 
@@ -49,12 +50,10 @@ class Dealer:
         self.doubled_hands = {}
         self.hand_rewards = {}
         self.dealer_score = None
-        self.ass_pairs = {}
 
         for i in range(number_of_players):
             self.doubled_hands[i] = []
             self.hand_rewards[i] = []
-            self.ass_pairs[i] = []
 
         self.player_playing = 0
         self.hand_playing = 0
@@ -70,12 +69,10 @@ class Dealer:
         self.doubled_hands = {}
         self.hand_rewards = {}
         self.dealer_score = None
-        self.ass_pairs = {}
 
         for i in range(self.number_of_players):
             self.doubled_hands[i] = []
             self.hand_rewards[i] = []
-            self.ass_pairs[i] = []
 
         self.player_playing = 0
         self.hand_playing = 0
@@ -83,6 +80,7 @@ class Dealer:
         for i in range(self.number_of_players):
             self.hands[i] = [[self.deck.next_card()]]
         for i in range(self.number_of_players):
+            # TODO: check that this is the way to do this
             self.hands[i][0].append(self.deck.next_card())
 
         self.dealer_cards.append(self.deck.next_card())
@@ -113,6 +111,7 @@ class Dealer:
     def hit(self, player_id, hand_id):
         self.hands[player_id][hand_id].append(self.deck.next_card())
         score = get_score(self.hands[player_id][hand_id])
+        # TODO: remplacer par score in [0, 21, 22] ?
         return score in [0, 22]
 
     def split(self, player_id, hand_id):
@@ -128,15 +127,12 @@ class Dealer:
             raise ValueError("you should have exactly two cards to be able to split")
 
         try:
-            if self.hands[player_id][hand_id][0] < 10 and self.hands[player_id][hand_id][1] < 10:
+            if self.hands[player_id][hand_id][0] < 10 or self.hands[player_id][hand_id][1] < 10:
                 assert self.hands[player_id][hand_id][0] == self.hands[player_id][hand_id][1]
         except AssertionError:
             raise ValueError("you should have a double in order to split")
 
         ass_pair = self.hands[player_id][hand_id][0] == 1
-
-        if ass_pair:
-            self.ass_pairs[player_id].append(hand_id)
 
         value = self.hands[player_id][hand_id][0]
 
@@ -152,13 +148,13 @@ class Dealer:
         x = 2 if doubled else 1
         player_score = get_score(self.hands[player_id][hand_id])
 
-        if player_score == 22 and hand_id in self.ass_pairs[player_id]:
+        if player_score == 22 and len(self.hands[player_id]) >= 2:
             player_score = 21
 
         if player_score == 0:
             return -x
         if player_score == 22 and self.dealer_score < 22:
-            return 2 * x
+            return 1.5 * x
         if self.dealer_score > player_score:
             return -x
         if self.dealer_score == player_score:
@@ -166,7 +162,7 @@ class Dealer:
         return x
 
     def results(self):
-        while get_score(self.dealer_cards) < 17 and get_score(self.dealer_cards) != 0:
+        while 0 < get_score(self.dealer_cards) < 17 or is_soft_17(self.dealer_cards):
             self.dealer_cards.append(self.deck.next_card())
 
         self.dealer_score = get_score(self.dealer_cards)

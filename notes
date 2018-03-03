@@ -28,7 +28,7 @@ Boite à idées:
 
 
 Stratégie naive:
-- la meilleure stratégie naive est de rester dès que le score est strictement plus grand que 16 et tirer sinon.
+- la meilleure stratégie naive est de rester dès que le score est strictement plus grand que 14 et tirer sinon. On a alors une espérance à 2.85% à l'avantage du croupier
 
 J'ai hardcoder la stratégie de base. Le pb c'est que quand je la teste j'ai une espérance positive.
 Donc sûrement un problème avec l'environnment ou bien dans mon code qui s'occupe de calculer l'espérance. Je sais pas d'où ça vient ...
@@ -36,4 +36,11 @@ Donc sûrement un problème avec l'environnment ou bien dans mon code qui s'occu
 Les règles qui pourraient fausser l'espérance:
 - on ne peut pas toujours splitter autant que l'on souhaite. (ok c'est réparé)
 - quand on split deux as on est alors obligé de ne recevoir qu'une seule carte (réparé)
-- quand on split deux as le blackjack ne compte pas comme un blackjack ! (à réparer)
+- quand on split deux as le blackjack ne compte pas comme un blackjack ! (réparé)
+- en fait c'est dès que tu splits que tu peux pas faire blackjack (à répaper)
+- trouver de nouvelles règles qui pourraient changer la donne
+- il y a peut être un bail dans le mélange des cartes ? recoder un truc qui cette fois distribue les cartes de façon
+uniforme
+- ok en fait le blackjack n'est pas rémunéré fois 2 comme le dit wikipedia en français. D'après wikipedia en anglais et les jeux de blackjack en ligne, il faut rémunérer une fois et demi la mise
+
+https://www.blackjackapprenticeship.com/resources/how-to-count-cards/
