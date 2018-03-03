@@ -11,9 +11,9 @@ hit = "hit"
 double = "double"
 
 
-def my_basic_strategy(hand, dealer_hand, strategy):
-    # TODO
-    return naive_strategy(hand, dealer_hand, {"name": "naive", "k": 16})
+def my_basic_strategy(hand, dealer_hand, strategy, can_split=True):
+    state = encoding(hand, dealer_hand, can_split)
+    return strategy[state]
 
 
 def basic_strategy(hand, dealer_hand, strategy, can_split=True):
@@ -22,7 +22,7 @@ def basic_strategy(hand, dealer_hand, strategy, can_split=True):
 
     if player in [21, 22]:
         return stick
-    
+
     if type == "pair":
         if player in [1, 8]:
             return split
@@ -222,4 +222,3 @@ def plot_counter(n):
 # best_naive_strategy(100000)
 print(expectancy({"name": "basic"}, 1000000))
 # plot_counter(100000)
-
