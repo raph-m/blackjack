@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
 
+
 def get_value(cards):
     """
     :param cards: (list of ints) the cards to evaluate
@@ -89,6 +90,7 @@ def check_encoding():
     assert encoding([13, 8, 1], [1]) == "hard.19.1"
     assert encoding([13, 11], [1]) == "pair.10.1"
     assert encoding([7, 7], [1]) == "pair.7.1"
+
 
 def visualizePolicy(policy):
     #x, y, z_usable_ace, z_no_usable_ac = [], [], [], []
