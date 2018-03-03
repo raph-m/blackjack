@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from strategies.counters import ThorpCounter
 from util.tools import encoding
+import json
 
 stick = "stick"
 split = "split"
@@ -129,7 +130,7 @@ def choose_action(hand, dealer_hand, strategy, can_split=True):
     if strategy["name"] == "basic":
         return basic_strategy(hand, dealer_hand, strategy, can_split=can_split)
     if strategy["name"] == "my_basic":
-        return my_basic_strategy(hand, dealer_hand, strategy)
+        return my_basic_strategy(hand, dealer_hand, strategy, can_split=can_split)
 
 
 def simple_play(dealer, strategy):
@@ -220,5 +221,7 @@ def plot_counter(n):
     plt.show()
 
 # best_naive_strategy(100000)
-print(expectancy({"name": "basic"}, 1000000))
+
+
+# print(expectancy(policy, 1000))
 # plot_counter(100000)
