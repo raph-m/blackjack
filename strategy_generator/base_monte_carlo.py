@@ -1,9 +1,10 @@
 from environment.dealer import Dealer
+from util.tools import encoding
 import numpy as np
 """
 We assume here that there is ONLY ONE player playing against the dealer
 We encode a pair state action by the following tuple:
-((player hand), (dealer hand), action). Example: ((2,7,10),(4,8,3),"hit")
+((player hand), dealer hand, action). Example: ((2,7,10),4,"hit")
 The cards are represented by there nature (from ace to king (1 to 13)) and the
 actions hit, stick, double and split.
 That way, the Q value of a state action pair is the average reward obtained
@@ -15,63 +16,64 @@ dealer = Dealer(seed=0)
 actions = ["hit", "stick", "double", "split"]
 
 
-def choose_action(state, Q, epsilon):
+def choose_action(state, Q, epsilon, random=False):
     # implement epsilon-greedy explore policy
     # First case, the player has a double
-    hand = state[0]
-    if len(hand)==2 and hand[0] == hand[1]:
+    dec = state.split(".")
+    typ, player, dealer = dec[0], int(dec[1]), int(dec[2])
+    if typ=="pair":
         n_a = 4
     else:
         n_a = 3
+    if random:
+        return actions[np.random.randint(n_a)]
     q = np.zeros(n_a)
     for i in range(n_a):
-        p = (state[0], state[1], actions[i])
+        p = (state, actions[i])
         if p in Q:
             q[i] = Q[p]
 
     prob = np.random.random()
     if prob > epsilon:
-        return actions[np.argmax(q)]
+        action = actions[np.argmax(q)]
+        #print("det", state, action)
+        return action
     else:
-        return actions[np.random.randint(4)]
-
+        action = actions[np.random.randint(n_a)]
+        #print("rand", state, action)
+        return action
 
 def episode(Q, F, epsilon):
     res = dealer.reset()
     observation = []
     if res["done"]:
-        dh = tuple(np.sort(res["dealer_hand"]))
-        ph = tuple(np.sort(res["hands"][0][0]))
-        reward = res["rewards"][0]
-        pair = (ph, dh, "stick")
+        dealer_cards = res["dealer_hand"]
+        player_cards = res["hands"][0][0]
+        reward = int(sum(res["rewards"][0]))
+        pair = (encoding(player_cards, [dealer_cards[0]]), "stick")
         observation.append(pair)
     else:
-        reward = 0
         player_playing = res["player_playing"]
         hand_playing = res["hand_playing"]
         dealer_cards = res["dealer_cards"]
-        hand = res["hands"][player_playing][hand_playing]
-        if len(hand)==2 and hand[0] == hand[1]:
-            n_a = 4
-        else:
-            n_a = 3
-        action = actions[np.random.randint(n_a)]
-        observation.append((tuple(np.sort(hand)),
-            tuple(np.sort(dealer_cards)),
-            action))
+        player_cards = res["hands"][player_playing][hand_playing]
+        state = encoding(player_cards, [dealer_cards[0]])
+        action = choose_action(state, Q, epsilon, random=True)
+        observation.append((state, action))
         for t in range(12):
+            #print("step", action, hand)
             res = dealer.step(action)
             if res["done"]:
+                reward = int(sum(res["rewards"][0]))
                 break
             player_playing = res["player_playing"]
             hand_playing = res["hand_playing"]
             dealer_cards = res["dealer_cards"]
-            hand = res["hands"][player_playing][hand_playing]
-            state = (tuple(hand), tuple(dealer_cards))
+            player_cards = res["hands"][player_playing][hand_playing]
+            can_split = len(res["hands"][player_playing])==1
+            state = encoding(player_cards, [dealer_cards[0]], can_split)
             action = choose_action(state, Q, epsilon)
-            observation.append((tuple(np.sort(hand)),
-                tuple(np.sort(dealer_cards)),
-                action))
+            observation.append((state, action))
 
     visited = []
     for sa in observation:
@@ -91,12 +93,12 @@ def episode(Q, F, epsilon):
 def get_policy(Q):
     policy = {}
     for p in Q:
-        state = (p[0], p[1])
-        action = p[2]
+        state = p[0]
+        action = p[1]
         reward = Q[p]
         if state in policy:
-            a = policy[state]
-            pair = (p[0], p[1], a)
+            act = policy[state]
+            pair = (state, act)
             if Q[pair] < Q[p]:
                 policy[state] = action
         else :
@@ -109,7 +111,8 @@ def MC(dealer=dealer, epochs=100, epsilon=0.1):
     F = {}
     for i in range(epochs):
         Q, F = episode(Q, F, epsilon)
-        if i % 1000 == 0:
+        if i % 10000 == 0:
             print("episode", i)
     policy = get_policy(Q)
+    #print(Q)
     return policy

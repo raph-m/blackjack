@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+from matplotlib import cm
+import numpy as np
+
 def get_value(cards):
     """
     :param cards: (list of ints) the cards to evaluate
@@ -79,4 +83,58 @@ def check_encoding():
     assert encoding([13, 11], [1]) == "pair.10.1"
     assert encoding([7, 7], [1]) == "pair.7.1"
 
-check_encoding()
+def visualizePolicy(policy):
+    #x, y, z_usable_ace, z_no_usable_ac = [], [], [], []
+    #s1, s2, ace, actions = Q.shape
+    pair, soft, hard = np.zeros((10,10)), np.zeros((10,10)), np.zeros((18,10))
+    actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
+    for state in policy :
+        encoded = state.split(".")
+        typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
+        if typ == "pair" :
+            pair[player-1, dealer-1] = actions_space[policy[state]]
+        elif typ == "soft" :
+            soft[player-13, dealer-1] = actions_space[policy[state]]
+        elif typ == "hard" :
+            hard[player-4, dealer-1] = actions_space[policy[state]]
+
+    plt.matshow(pair)
+    plt.xlabel("dealer card")
+    plt.ylabel("player hand")
+    plt.title("base strategy with pairs \n hit : violet, stick : blue, double : green, split : yellow")
+
+    plt.show()
+"""
+    ax = fig.add_subplot(1,2,1,projection='3d')
+    ax.plot_trisurf(x, x, pair, cmap=cm.jet)
+    ax.set_xlabel('Dealer card', fontsize=20)
+    ax.set_ylabel('Player sum', fontsize=20)
+    ax.set_zlabel('State-Value', fontsize=20)
+    ax.set_title('No Usable Ace', fontsize=20)
+    ax.tick_params(axis='x', labelsize=15)
+    ax.tick_params(axis='y', labelsize=15)
+    ax.tick_params(axis='z', labelsize=15)
+"""
+
+
+
+"""
+    for i in range(11,s1):
+        for j in range(s2):
+            y.append(i+1)
+            x.append(j+1)
+            z_usable_ace.append(np.max(Q[i,j,1,:]))
+            z_no_usable_ace.append(np.max(Q[i,j,0,:]))
+"""
+
+"""
+    ax = fig.add_subplot(1,2,2,projection='3d')
+    ax.plot_trisurf(x, y, z_usable_ace, cmap=cm.jet)
+    ax.set_xlabel('Dealer card', fontsize=20)
+    ax.set_ylabel('Player sum', fontsize=20)
+    ax.set_zlabel('State-Value', fontsize=20)
+    ax.set_title('Usable Ace', fontsize=20)
+    ax.tick_params(axis='x', labelsize=15)
+    ax.tick_params(axis='y', labelsize=15)
+    ax.tick_params(axis='z', labelsize=15)
+"""
