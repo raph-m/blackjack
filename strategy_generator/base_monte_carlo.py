@@ -17,7 +17,12 @@ actions = ["hit", "stick", "double", "split"]
 
 def choose_action(state, Q, epsilon):
     # implement epsilon-greedy explore policy
-    n_a = 4
+    # First case, the player has a double
+    hand = state[0]
+    if len(hand)==2 and hand[0] == hand[1]:
+        n_a = 4
+    else:
+        n_a = 3
     q = np.zeros(n_a)
     for i in range(n_a):
         p = (state[0], state[1], actions[i])
@@ -41,12 +46,16 @@ def episode(Q, F, epsilon):
         pair = (ph, dh, "stick")
         observation.append(pair)
     else:
-        action = actions[np.random.randint(4)]
         reward = 0
         player_playing = res["player_playing"]
         hand_playing = res["hand_playing"]
         dealer_cards = res["dealer_cards"]
         hand = res["hands"][player_playing][hand_playing]
+        if len(hand)==2 and hand[0] == hand[1]:
+            n_a = 4
+        else:
+            n_a = 3
+        action = actions[np.random.randint(n_a)]
         observation.append((tuple(np.sort(hand)),
             tuple(np.sort(dealer_cards)),
             action))

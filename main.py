@@ -1,2 +1,3 @@
-from tests.play_blackjack import play
-play(10)
+from strategy_generator.base_monte_carlo import MC
+policy = MC(epochs=10)
+print (policy)
