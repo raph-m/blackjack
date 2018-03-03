@@ -44,3 +44,7 @@ uniforme
 - ok en fait le blackjack n'est pas rémunéré fois 2 comme le dit wikipedia en français. D'après wikipedia en anglais et les jeux de blackjack en ligne, il faut rémunérer une fois et demi la mise
 
 https://www.blackjackapprenticeship.com/resources/how-to-count-cards/
+
+Parallélisation:
+- j'ai déjà fait les vérifications pour la parallélisation de expectancy et de plot_counter. Par contre j'ai un facteur 2 au lieu d'avoir un facteur 4, ce qui est bizarre. Il faudrait tester sur Compute Engine pour voir ce que ça donne.
+
