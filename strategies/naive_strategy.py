@@ -15,7 +15,6 @@ double = "double"
 # computing features for training set
 
 
-
 def my_basic_strategy(hand, dealer_hand, strategy, can_split=True):
     state = encoding(hand, dealer_hand, can_split)
     return strategy[state]
@@ -280,12 +279,13 @@ def plot_counter_parallel(n):
     plt.scatter(ks, vs)
     plt.show()
 
-
 import time
 
-n_tries = 1000000
-start = time.time()
-plot_counter_parallel(n_tries)
-end = time.time()
-print("parallel time: ")
-print(end-start)
+# n_tries = 10000000
+# start = time.time()
+# plot_counter_parallel(n_tries)
+# end = time.time()
+# print("parallel time: ")
+# print(end-start)
+
+# print(parallel_expectancy({"name": "basic"}, n=10000))

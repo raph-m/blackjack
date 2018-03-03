@@ -12,6 +12,14 @@ alpha = 10
 with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "r") as fp:
     policy = json.load(fp)
 
-from strategies.naive_strategy import parallel_expectancy
-n_tries = 10000000
-print(parallel_expectancy(policy, n_tries))
+print(policy["soft.19.4"])
+policy["name"] = "my_basic"
+
+from strategies.naive_strategy import parallel_expectancy, expectancy
+import time
+start = time.time()
+n_tries = 10000000  # 00
+print(expectancy(policy, n_tries))
+end = time.time()
+print("parallel time: ")
+print(end-start)

@@ -79,11 +79,16 @@ class Dealer:
 
         for i in range(self.number_of_players):
             self.hands[i] = [[self.deck.next_card()]]
+
+        self.dealer_cards.append(self.deck.next_card())
+
         for i in range(self.number_of_players):
             # TODO: check that this is the way to do this
             self.hands[i][0].append(self.deck.next_card())
 
-        self.dealer_cards.append(self.deck.next_card())
+        # pour le blackjack américain il faut rajouter ça ici:
+        # self.dealer_cards.append(self.deck.next_card())
+
 
         for i in range(self.number_of_players):
             self.player_playing = i
