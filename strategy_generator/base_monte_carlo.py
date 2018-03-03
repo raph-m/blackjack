@@ -111,8 +111,8 @@ def MC(dealer=dealer, epochs=100, epsilon=0.1):
     F = {}
     for i in range(epochs):
         Q, F = episode(Q, F, epsilon)
-        if i % 10000 == 0:
-            print("episode", i)
+        #if i % 10000 == 0:
+            #print("episode", i)
     policy = get_policy(Q)
     #print(Q)
     return policy

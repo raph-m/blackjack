@@ -93,8 +93,6 @@ def check_encoding():
 
 
 def visualizePolicy(policy):
-    #x, y, z_usable_ace, z_no_usable_ac = [], [], [], []
-    #s1, s2, ace, actions = Q.shape
     pair, soft, hard = np.zeros((10,10)), np.zeros((10,10)), np.zeros((18,10))
     actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
     for state in policy :
@@ -107,43 +105,35 @@ def visualizePolicy(policy):
         elif typ == "hard" :
             hard[player-4, dealer-1] = actions_space[policy[state]]
 
+    x = np.arange(10)
+    yh = np.arange(18)
+    dlabel = ["As", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    plabel = ["As,As", "2,2", "3,3", "4,4", "5,5", "6,6", "7,7", "8,8", "9,9",
+        "10,10"]
+    slabel = ["13", "14", "15", "16", "17", "18", "19", "20", "21", "BJ"]
+    hlabel = ["4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+        "16", "17", "18", "19", "20", "21"]
     plt.matshow(pair)
     plt.xlabel("dealer card")
     plt.ylabel("player hand")
-    plt.title("base strategy with pairs \n hit : violet, stick : blue, double : green, split : yellow")
+    plt.title("base strategy with pairs \n violet : hit, blue : stick, green :"
+        + "double, yellow : split")
+    plt.xticks(x, dlabel)
+    plt.yticks(x, plabel)
 
+    plt.matshow(soft)
+    plt.xlabel("dealer card")
+    plt.ylabel("player hand")
+    plt.title("base strategy with soft hands \n violet : hit, blue : stick, "
+        + "yellow : double")
+    plt.xticks(x, dlabel)
+    plt.yticks(x, slabel)
+
+    plt.matshow(hard)
+    plt.xlabel("dealer card")
+    plt.ylabel("player hand")
+    plt.title("base strategy with hard hands \n violet : hit, blue : stick, "
+        + "yellow : double")
+    plt.xticks(x, dlabel)
+    plt.yticks(yh, hlabel)
     plt.show()
-"""
-    ax = fig.add_subplot(1,2,1,projection='3d')
-    ax.plot_trisurf(x, x, pair, cmap=cm.jet)
-    ax.set_xlabel('Dealer card', fontsize=20)
-    ax.set_ylabel('Player sum', fontsize=20)
-    ax.set_zlabel('State-Value', fontsize=20)
-    ax.set_title('No Usable Ace', fontsize=20)
-    ax.tick_params(axis='x', labelsize=15)
-    ax.tick_params(axis='y', labelsize=15)
-    ax.tick_params(axis='z', labelsize=15)
-"""
-
-
-
-"""
-    for i in range(11,s1):
-        for j in range(s2):
-            y.append(i+1)
-            x.append(j+1)
-            z_usable_ace.append(np.max(Q[i,j,1,:]))
-            z_no_usable_ace.append(np.max(Q[i,j,0,:]))
-"""
-
-"""
-    ax = fig.add_subplot(1,2,2,projection='3d')
-    ax.plot_trisurf(x, y, z_usable_ace, cmap=cm.jet)
-    ax.set_xlabel('Dealer card', fontsize=20)
-    ax.set_ylabel('Player sum', fontsize=20)
-    ax.set_zlabel('State-Value', fontsize=20)
-    ax.set_title('Usable Ace', fontsize=20)
-    ax.tick_params(axis='x', labelsize=15)
-    ax.tick_params(axis='y', labelsize=15)
-    ax.tick_params(axis='z', labelsize=15)
-"""

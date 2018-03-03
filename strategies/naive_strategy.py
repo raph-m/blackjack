@@ -5,11 +5,15 @@ import matplotlib.pyplot as plt
 from strategies.counters import ThorpCounter
 from util.tools import encoding
 import json
+from multiprocessing import Pool
 
 stick = "stick"
 split = "split"
 hit = "hit"
 double = "double"
+
+# computing features for training set
+
 
 
 def my_basic_strategy(hand, dealer_hand, strategy, can_split=True):
@@ -162,17 +166,44 @@ def simple_play(dealer, strategy):
     return np.mean(rewards)
 
 
-def expectancy(strategy, n):
+def expectancy(strategy=None, n=100, seed=300):
     """
     :param strategy: (dict) la stratégie à tester
     :param n: (int) nombre d'essais
     :return: (float) l'espérance de cette stratégie
     """
-    dealer = Dealer(seed=300)
+    dealer = Dealer(seed=seed)
     total = 0.0
     for i in range(n):
         total += simple_play(dealer, strategy)
     return total / n
+
+
+def parallel_expectancy(strategy, n):
+    """
+    :param strategy: (dict) la stratégie à tester
+    :param n: (int) nombre d'essais
+    :return: (float) l'espérance de cette stratégie
+    """
+    pool = Pool()
+    print("N processes: "+str(pool._processes))
+    tasks = []
+    n_tasks = 50
+    results = np.zeros(n_tasks)
+    seeds = range(n_tasks)
+    for i in range(n_tasks):
+        kwds = {
+            "strategy": strategy,
+            "seed": seeds[i],
+            "n": int(n/n_tasks)
+        }
+        tasks.append(pool.apply_async(expectancy, kwds=kwds))
+    pool.close()
+    pool.join()
+    for i in range(n_tasks):
+        results[i] = tasks[i].get()
+
+    return np.mean(results)
 
 
 def best_naive_strategy(n):
@@ -185,9 +216,9 @@ def best_naive_strategy(n):
     plt.show()
 
 
-def plot_counter(n):
+def plot_counter(n=100, seed=300):
 
-    dealer = Dealer(counter=ThorpCounter())
+    dealer = Dealer(counter=ThorpCounter(), seed=seed)
 
     nb_events = {}
     rewards = {}
@@ -206,7 +237,36 @@ def plot_counter(n):
             nb_events[count] = 1
             rewards[count] = r
 
-    print(nb_events)
+    return nb_events, rewards
+
+
+def plot_counter_parallel(n):
+    pool = Pool()
+    print("N processes: "+str(pool._processes))
+    tasks = []
+    n_tasks = 50
+    results = np.zeros(n_tasks)
+    seeds = range(n_tasks)
+    for i in range(n_tasks):
+        kwds = {
+            "seed": seeds[i],
+            "n": int(n/n_tasks)
+        }
+        tasks.append(pool.apply_async(plot_counter, kwds=kwds))
+    pool.close()
+    pool.join()
+    nb_events = {}
+    rewards = {}
+    for i in range(n_tasks):
+        current_nb_events, current_rewards = tasks[i].get()
+
+        for k, v in current_nb_events.items():
+            try:
+                nb_events[k] += current_nb_events[k]
+                rewards[k] += current_rewards[k]
+            except:
+                nb_events[k] = current_nb_events[k]
+                rewards[k] = current_rewards[k]
 
     for k, v in nb_events.items():
         rewards[k] /= nb_events[k]
@@ -220,8 +280,12 @@ def plot_counter(n):
     plt.scatter(ks, vs)
     plt.show()
 
-# best_naive_strategy(100000)
 
+import time
 
-# print(expectancy(policy, 1000))
-# plot_counter(100000)
+n_tries = 1000000
+start = time.time()
+plot_counter_parallel(n_tries)
+end = time.time()
+print("parallel time: ")
+print(end-start)
