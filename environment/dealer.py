@@ -49,10 +49,12 @@ class Dealer:
         self.doubled_hands = {}
         self.hand_rewards = {}
         self.dealer_score = None
+        self.ass_pairs = {}
 
         for i in range(number_of_players):
             self.doubled_hands[i] = []
             self.hand_rewards[i] = []
+            self.ass_pairs[i] = []
 
         self.player_playing = 0
         self.hand_playing = 0
@@ -68,10 +70,12 @@ class Dealer:
         self.doubled_hands = {}
         self.hand_rewards = {}
         self.dealer_score = None
+        self.ass_pairs = {}
 
         for i in range(self.number_of_players):
             self.doubled_hands[i] = []
             self.hand_rewards[i] = []
+            self.ass_pairs[i] = []
 
         self.player_playing = 0
         self.hand_playing = 0
@@ -131,6 +135,9 @@ class Dealer:
 
         ass_pair = self.hands[player_id][hand_id][0] == 1
 
+        if ass_pair:
+            self.ass_pairs[player_id].append(hand_id)
+
         value = self.hands[player_id][hand_id][0]
 
         self.hands[player_id][hand_id] = [value]
@@ -144,6 +151,9 @@ class Dealer:
         doubled = hand_id in self.doubled_hands[player_id]
         x = 2 if doubled else 1
         player_score = get_score(self.hands[player_id][hand_id])
+
+        if player_score == 22 and hand_id in self.ass_pairs[player_id]:
+            player_score = 21
 
         if player_score == 0:
             return -x
@@ -215,7 +225,6 @@ class Dealer:
                     return self.results()
             else:
                 self.hand_playing += 1
-
 
         return {
             "done": False,

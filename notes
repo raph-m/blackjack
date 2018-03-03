@@ -32,3 +32,8 @@ Stratégie naive:
 
 J'ai hardcoder la stratégie de base. Le pb c'est que quand je la teste j'ai une espérance positive.
 Donc sûrement un problème avec l'environnment ou bien dans mon code qui s'occupe de calculer l'espérance. Je sais pas d'où ça vient ...
+
+Les règles qui pourraient fausser l'espérance:
+- on ne peut pas toujours splitter autant que l'on souhaite. (ok c'est réparé)
+- quand on split deux as on est alors obligé de ne recevoir qu'une seule carte (réparé)
+- quand on split deux as le blackjack ne compte pas comme un blackjack ! (à réparer)
