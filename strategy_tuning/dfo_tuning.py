@@ -27,11 +27,11 @@ def tune(algo):
     if algo == "MC":
         res = gp_minimize(function_mc, [(0,1)], n_calls=15, x0=[0.5], verbose=True)
         print ('best epsilon is:', res.x)
-        print ('best expectancy is:', res.fun)
+        print ('best expectancy is:', - res.fun)
     if algo == "qlearn":
         res = gp_minimize(function_qlearn, [(0, .2),(0,.2),(.8,1)], n_calls=15, verbose=True)
         epsilon, alpha, gamma = res.x
         print ('best epsilon is:', epsilon)
         print ('best alpha is:', alpha)
         print ('best gamma is:', gamma)
-        print ('best expectancy is:', res.fun)
+        print ('best expectancy is:', - res.fun)

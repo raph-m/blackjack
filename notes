@@ -49,3 +49,18 @@ Parallélisation:
 - j'ai déjà fait les vérifications pour la parallélisation de expectancy et de plot_counter. Par contre j'ai un facteur 2 au lieu d'avoir un facteur 4, ce qui est bizarre. Il faudrait tester sur Compute Engine pour voir ce que ça donne.
 - je run un truc à 10 millions d'essais sur Compute Engine pour estimer l'espérance de la policy qu'on a créé. résultat: 0.85 % à l'avantage de la maison.
 - faudrait runner le même script sur la stratégie de base pour voir si on fait mieux. Après 10 millions d'essais, on obtient: 0.80% d'avantage pour la maison...
+
+Apprentissage du comptage:
+- on joue n_train parties de n_mains (le croupier joue n_mains fois) avec 4 joueurs.
+Pour chaque main on compte (en cumulé) les cartes sorties dans un vecteur de
+taille 13. Un sample est donc une matrice S de taille n_mais*13 contenant des
+entiers de 0 à 4. Pour apprendre comment on compte chacune des cartes, on
+apprend un vecteur w de taille 13*1.
+Plus précisement, à la fin de la main i, on calcul r=(S[i],w), si r<0 on mise 1
+à la partie i+1, si r>0 on mise 10. Le score i sera donc la mise remporté à la
+fin de la main i+1 sachant le comptage à la main i. On note score(S) le score
+obtenu pour les mains de 1 à n_mains-1. Le but est de minimiser la distance
+entre score(S) et Y(S) qui est le vecteur des gains obtenus en misant 10 sur les
+parties que l'on remporte et les parties nulles et 1 sur les parties perdues.
+Ensuite on trouve le w minimisant la norme L2 entre chacun des couples
+(score(S), Y(S))
