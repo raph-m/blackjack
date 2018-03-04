@@ -44,7 +44,7 @@ print(end-start)
 """
 
 
-# implement dfo to find the better hyper parameters for MC and Q-learning
+# implement dfo to find the best hyper parameters for MC and Q-learning
 from strategy_tuning.dfo_tuning import tune
 tune("qlearn")
 #tune("MC")

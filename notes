@@ -64,3 +64,6 @@ entre score(S) et Y(S) qui est le vecteur des gains obtenus en misant 10 sur les
 parties que l'on remporte et les parties nulles et 1 sur les parties perdues.
 Ensuite on trouve le w minimisant la norme L2 entre chacun des couples
 (score(S), Y(S))
+
+
+blackjack/temp_results/nb_events.json
