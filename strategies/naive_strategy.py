@@ -138,7 +138,7 @@ def simple_play(dealer, strategy, mean=True):
     """
     une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
     """
-    res = dealer.reset_completely()
+    res = dealer.reset()
     while not res["done"]:
 
         player_playing = res["player_playing"]
@@ -160,7 +160,7 @@ def simple_play_2(dealer, strategy):
     """
     une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
     """
-    res = dealer.reset_completely()
+    res = dealer.reset()
     while not res["done"]:
 
         player_playing = res["player_playing"]
@@ -172,6 +172,8 @@ def simple_play_2(dealer, strategy):
         action = choose_action(hand, dealer_cards, strategy=strategy, can_split=can_split)
         res = dealer.step(action)
 
+    print("hello")
+    print(res)
     player_blackjacks = [get_score(cards) for cards in res["hands"][0]]
     player_blackjacks = [s == 22 for s in player_blackjacks]
     player_blackjacks = [1 if s else 0 for s in player_blackjacks]

@@ -193,7 +193,7 @@ class Dealer:
         return {
             "shuffle": shuffle,
             "done": True,
-            "dealer_hand": self.dealer_cards,
+            "dealer_cards": self.dealer_cards,
             "dealer_score": self.dealer_score,
             "hands": self.hands,
             "rewards": self.hand_rewards,

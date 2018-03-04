@@ -48,3 +48,23 @@ print(end-start)
 from strategy_tuning.dfo_tuning import tune
 tune("qlearn")
 #tune("MC")
+
+
+# how to use the card counter:
+from environment.dealer import Dealer
+from strategies.counters import CountAllCards
+from strategies.naive_strategy import simple_play_2
+
+dealer = Dealer(counter=CountAllCards(), seed=0)
+total = 0.0
+for i in range(10):
+    print("new game: ")
+    print("number of aces: "+str(dealer.deck.counter.get_rc()[1]))
+    print("number of kings: "+str(dealer.deck.counter.get_rc()[13]))
+
+    r, p_blackjacks, d_blackjack, d_burst = simple_play_2(dealer, strategy={"name": "basic"})
+    print("reward: "+str(r))
+    print("player did a blackjack: "+str(p_blackjacks))
+    print("dealer did a blackjack: "+str(d_blackjack))
+    print("dealer burst: "+str(d_burst))
+    print("")
