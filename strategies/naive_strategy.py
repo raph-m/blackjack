@@ -134,7 +134,7 @@ def choose_action(hand, dealer_hand, strategy, can_split=True):
         return my_basic_strategy(hand, dealer_hand, strategy, can_split=can_split)
 
 
-def simple_play(dealer, strategy):
+def simple_play(dealer, strategy, mean=True):
     """
     une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
     """
@@ -151,7 +151,9 @@ def simple_play(dealer, strategy):
         res = dealer.step(action)
 
     rewards = res["rewards"][0]
-    return np.mean(rewards)
+    if mean:
+        return np.mean(rewards)
+    return np.sum(rewards)
 
 
 def simple_play_2(dealer, strategy):
@@ -323,7 +325,7 @@ def plot_counter_parallel(n, show=True):
     ks = []
     vs = []
     for k, v in rewards.items():
-        if nb_events[k] > 10000:
+        if nb_events[k] > 1:
             ks.append(k)
             vs.append(v)
 
@@ -337,4 +339,69 @@ def plot_counter_parallel(n, show=True):
         with open("temp_results/nb_events.json", "w") as fp:
             json.dump(nb_events, fp)
         with open("temp_results/rewards.json", "w") as fp:
-            json.dump(nb_events, fp)
+            json.dump(rewards, fp)
+
+
+def evaluate_counting_strategy(n=1000, strategy=None, bet_mapping=None, seed=1):
+    dealer = Dealer(seed=seed)
+    total = 0.0
+    for i in range(n):
+        count = dealer.deck.counter.get_rc()
+        total += simple_play(dealer, strategy, mean=False) * bet_mapping[count]
+    print("task "+str(seed)+" is done !")
+    return total
+
+
+def parallel_evaluate_counting_strategy(strategy, n, bet_mapping):
+    """
+    :param strategy: (dict) la stratégie à tester
+    :param n: (int) nombre d'essais
+    :return: (float) l'espérance de cette stratégie
+    """
+    pool = Pool()
+    print("N processes: "+str(pool._processes))
+    tasks = []
+    n_tasks = 50
+    results = np.zeros(n_tasks)
+    seeds = range(n_tasks)
+    for i in range(n_tasks):
+        kwds = {
+            "strategy": strategy,
+            "bet_mapping": bet_mapping,
+            "seed": seeds[i],
+            "n": int(n/n_tasks)
+        }
+        tasks.append(pool.apply_async(evaluate_counting_strategy, kwds=kwds))
+    pool.close()
+    pool.join()
+    for i in range(n_tasks):
+        results[i] = tasks[i].get()
+
+    return np.sum(results)
+
+
+def read_counter_results():
+    with open("temp_results/nb_events.json", "r") as fp:
+        nb_events = json.load(fp)
+    with open("temp_results/rewards.json", "r") as fp:
+        rewards = json.load(fp)
+
+    print(nb_events)
+    print(rewards)
+    ks = []
+    vs = []
+    for k, v in rewards.items():
+        if nb_events[k] > 1:
+            ks.append(k)
+            vs.append(v)
+
+    ks = np.array(ks).astype(int)
+    vs = np.array(vs)
+
+    order = np.argsort(ks)
+    ks = ks[order]
+    vs = vs[order]
+
+    plt.scatter(ks, vs)
+    plt.show()
+
