@@ -6,7 +6,7 @@ We assume here that there is ONLY ONE player playing against the dealer
 We encode a pair state action by the following tuple:
 (state, action) where state is encoded by the string : "type.player_score.dealer_hand"
 The cards are represented by there nature (from ace to king (1 to 13)) and the
-actions hit, stick, double and split.
+actions hit, stickdealer_cardsd split.
 That way, the Q value of a state action pair is the average reward obtained
 after this pair appeared.
 At the beginning of each episode, we choose radomly an action, in this case, 0
@@ -47,7 +47,7 @@ def episode(Q, F, epsilon):
     res = dealer.reset()
     observation = []
     if res["done"]:
-        dealer_cards = res["dealer_hand"]
+        dealer_cards = res["dealer_cards"]
         player_cards = res["hands"][0][0]
         reward = int(sum(res["rewards"][0]))
         pair = (encoding(player_cards, [dealer_cards[0]]), "stick")
