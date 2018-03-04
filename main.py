@@ -14,8 +14,8 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "w") as fp:
 """
 # generate a policy with a Q learning algorithm
 from strategy_generator.base_qlearning import QLearn
-epochs = 100000
-policy = QLearn(epochs=epochs, epsilon=0.1, alpha=0.1, gamma=0.99)
+epochs = 1000000
+policy = QLearn(epochs=epochs, epsilon=0.1989, alpha=0.0362, gamma=0.9587)
 policy["name"] = "my_basic"
 policy["epochs"] = epochs
 """
@@ -47,9 +47,11 @@ print(end-start)
 # implement dfo to find the best hyper parameters for MC and Q-learning
 from strategy_tuning.dfo_tuning import tune
 tune("qlearn")
-#tune("MC")
+# results: epsilon = 0.1989, alpha = 0.0362, gamma = 0.9587
+tune("MC")
 
 
+"""
 # how to use the card counter:
 from environment.dealer import Dealer
 from strategies.counters import CountAllCards
@@ -68,3 +70,10 @@ for i in range(10):
     print("dealer did a blackjack: "+str(d_blackjack))
     print("dealer burst: "+str(d_burst))
     print("")
+"""
+
+"""
+# Visualize the policy in 3 figures for pairs, soft hands and hard hands
+from util.tools import visualizePolicy
+visualizePolicy(policy)
+"""

@@ -95,7 +95,10 @@ def check_encoding():
 def visualizePolicy(policy):
     pair, soft, hard = np.zeros((10,10)), np.zeros((10,10)), np.zeros((18,10))
     actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
-    for state in policy :
+    pol = dict(policy)
+    del pol["epochs"]
+    del pol["name"]
+    for state in pol :
         encoded = state.split(".")
         typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
         if typ == "pair" :
