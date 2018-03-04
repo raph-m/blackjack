@@ -27,3 +27,10 @@ end = time.time()
 print("done in: "+str(end-start))
 
 
+# implement dfo to find the best hyper parameters for MC and Q-learning
+from strategy_tuning.dfo_tuning import tune
+tune("qlearn")
+# results: epsilon = 0.1989, alpha = 0.0362, gamma = 0.9587
+tune("MC")
+
+

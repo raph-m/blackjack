@@ -4,16 +4,20 @@ from strategy_generator.base_qlearning import QLearn
 from environment.dealer import Dealer
 import numpy as np
 from skopt import gp_minimize
+import json
 
 epochs = 10000000
+epochs = 1000000
 n_exp = 100000
+
 
 def function_mc(x):
     dealer = Dealer(seed=10)
     epsilon = x[0]
     policy = MC(dealer, epochs, epsilon)
-    policy["name"]="my_basic"
+    policy["name"] = "my_basic"
     return - parallel_expectancy(policy, n_exp)
+
 
 def function_qlearn(x):
     dealer = Dealer(seed=10)
@@ -22,13 +26,14 @@ def function_qlearn(x):
     policy["name"] = "my_basic"
     return - parallel_expectancy(policy, n_exp)
 
+
 def tune(algo):
     alg = "DFO"
-    if algo == "MC" :
-        res = gp_minimize(function_mc, [(0,1)], n_calls=30, x0=[0.5], verbose=True)
+    if algo == "MC":
+        res = gp_minimize(function_mc, [(0, 1)], n_calls=30, x0=[0.5], verbose=True)
         with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
-            json.dump({"algorithm" : algo,
-                "epsilon" : res.x
+            json.dump({"algorithm": algo,
+                "epsilon" : res.x,
                 "value function" : -res.fun},
                 fp)
         #print ('best epsilon is:', res.x)
