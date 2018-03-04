@@ -293,7 +293,7 @@ def plot_counter(n=100, seed=300):
     return nb_events, rewards
 
 
-def plot_counter_parallel(n, show=True, n_processes=None):
+def plot_counter_parallel(n, show=True, n_processes=None, id=''):
     if n_processes:
         pool = Pool(n_processes)
     else:
@@ -340,9 +340,9 @@ def plot_counter_parallel(n, show=True, n_processes=None):
     else:
         print(nb_events)
         print(rewards)
-        with open("temp_results/nb_events.json", "w") as fp:
+        with open("temp_results/nb_events"+id+".json", "w") as fp:
             json.dump(nb_events, fp)
-        with open("temp_results/rewards.json", "w") as fp:
+        with open("temp_results/rewards"+id+".json", "w") as fp:
             json.dump(rewards, fp)
 
 
