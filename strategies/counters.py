@@ -16,7 +16,7 @@ default_thorp = {}
 for i in range(1, 14):
     if i >= 10 or i == 1:
         default_thorp[i] = -1
-    elif i <= 6:
+    elif 1 < i <= 6:
         default_thorp[i] = +1
     else:
         default_thorp[i] = 0
