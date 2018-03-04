@@ -56,7 +56,7 @@ def choose_action(state, Q, epsilon):
 def episode(Q, epsilon, alpha, gamma):
     res = dealer.reset()
     if res["done"]:
-        dealer_cards = res["dealer_hand"]
+        dealer_cards = res["dealer_cards"]
         player_cards = res["hands"][0][0]
         reward = int(sum(res["rewards"][0]))
         state = encoding(player_cards, [dealer_cards[0]])
