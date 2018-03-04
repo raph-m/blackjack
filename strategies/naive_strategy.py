@@ -12,8 +12,6 @@ split = "split"
 hit = "hit"
 double = "double"
 
-# computing features for training set
-
 
 def my_basic_strategy(hand, dealer_hand, strategy, can_split=True):
     state = encoding(hand, dealer_hand, can_split)
@@ -140,7 +138,6 @@ def simple_play(dealer, strategy):
     """
     une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
     """
-    interesting = False
     res = dealer.reset_completely()
     while not res["done"]:
 
@@ -148,21 +145,39 @@ def simple_play(dealer, strategy):
         hand_playing = res["hand_playing"]
         dealer_cards = res["dealer_cards"]
         hand = res["hands"][player_playing][hand_playing]
-        #
-        # if hand == [1, 1]:
-        #     interesting = True
-
         can_split = len(res["hands"][player_playing]) == 1
+
         action = choose_action(hand, dealer_cards, strategy=strategy, can_split=can_split)
-        # if interesting:
-        #     print(hand)
-        #     print(action)
-        #     print(res)
         res = dealer.step(action)
-    # if interesting:
-    #     print(res)
+
     rewards = res["rewards"][0]
     return np.mean(rewards)
+
+
+def simple_play_2(dealer, strategy):
+    """
+    une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
+    """
+    res = dealer.reset_completely()
+    while not res["done"]:
+
+        player_playing = res["player_playing"]
+        hand_playing = res["hand_playing"]
+        dealer_cards = res["dealer_cards"]
+        hand = res["hands"][player_playing][hand_playing]
+        can_split = len(res["hands"][player_playing]) == 1
+
+        action = choose_action(hand, dealer_cards, strategy=strategy, can_split=can_split)
+        res = dealer.step(action)
+
+    player_blackjacks = [get_score(cards) for cards in res["hands"][0]]
+    player_blackjacks = [s == 22 for s in player_blackjacks]
+    player_blackjacks = [1 if s else 0 for s in player_blackjacks]
+    dealer_blackjack = 1 if get_score(res["dealer_cards"]) == 22 else 0
+    dealer_burst = 1 if get_score(res["dealer_cards"]) == 0 else 0
+    rewards = res["rewards"][0]
+
+    return np.mean(rewards), np.mean(player_blackjacks), dealer_blackjack, dealer_burst
 
 
 def expectancy(strategy=None, n=100, seed=300):
@@ -215,6 +230,40 @@ def best_naive_strategy(n):
     plt.show()
 
 
+def blackjack_counter(n=100, seed=300):
+    dealer = Dealer(counter=ThorpCounter(), seed=seed, blackjack_reward=2)
+
+    nb_events = {}
+    rewards = {}
+    player_blackjacks = {}
+    dealer_blackjacks = {}
+    dealer_burst = {}
+
+    for i in range(n):
+        dealer.reset()
+        for j in range(50):
+            dealer.deck.next_card()
+
+        count = dealer.deck.counter.get_rc()
+        r, p_blackjacks, d_blackjack, d_burst = simple_play_2(dealer, strategy={"name": "basic"})
+
+        try:
+            nb_events[count] += 1
+            rewards[count] += r
+            player_blackjacks[count] += p_blackjacks
+            dealer_blackjacks[count] += d_blackjack
+            dealer_burst[count] += d_burst
+
+        except:
+            nb_events[count] = 1
+            rewards[count] = r
+            player_blackjacks[count] = p_blackjacks
+            dealer_blackjacks[count] = d_blackjack
+            dealer_burst[count] = d_burst
+
+    return nb_events, rewards, dealer_blackjacks, player_blackjacks, dealer_burst
+
+
 def plot_counter(n=100, seed=300):
 
     dealer = Dealer(counter=ThorpCounter(), seed=seed)
@@ -227,8 +276,9 @@ def plot_counter(n=100, seed=300):
         for j in range(50):
             dealer.deck.next_card()
 
-        r = simple_play(dealer, strategy={"name": "basic"})
         count = dealer.deck.counter.get_rc()
+        r = simple_play(dealer, strategy={"name": "basic"})
+
         try:
             nb_events[count] += 1
             rewards[count] += r
@@ -244,7 +294,7 @@ def plot_counter_parallel(n):
     print("N processes: "+str(pool._processes))
     tasks = []
     n_tasks = 50
-    results = np.zeros(n_tasks)
+
     seeds = range(n_tasks)
     for i in range(n_tasks):
         kwds = {
@@ -270,22 +320,14 @@ def plot_counter_parallel(n):
     for k, v in nb_events.items():
         rewards[k] /= nb_events[k]
 
+    print(rewards)
+
     ks = []
     vs = []
     for k, v in rewards.items():
-        ks.append(k)
-        vs.append(v)
+        if nb_events[k] > 100:
+            ks.append(k)
+            vs.append(v)
 
     plt.scatter(ks, vs)
     plt.show()
-
-import time
-
-# n_tries = 10000000
-# start = time.time()
-# plot_counter_parallel(n_tries)
-# end = time.time()
-# print("parallel time: ")
-# print(end-start)
-
-# print(parallel_expectancy({"name": "basic"}, n=10000))

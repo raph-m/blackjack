@@ -47,4 +47,5 @@ https://www.blackjackapprenticeship.com/resources/how-to-count-cards/
 
 Parallélisation:
 - j'ai déjà fait les vérifications pour la parallélisation de expectancy et de plot_counter. Par contre j'ai un facteur 2 au lieu d'avoir un facteur 4, ce qui est bizarre. Il faudrait tester sur Compute Engine pour voir ce que ça donne.
-
+- je run un truc à 10 millions d'essais sur Compute Engine pour estimer l'espérance de la policy qu'on a créé. résultat: 0.85 % à l'avantage de la maison.
+- faudrait runner le même script sur la stratégie de base pour voir si on fait mieux. Après 10 millions d'essais, on obtient: 0.80% d'avantage pour la maison...

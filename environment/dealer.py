@@ -39,7 +39,16 @@ class Deck:
 
 
 class Dealer:
-    def __init__(self, number_of_players=1, number_of_decks=6, shuffle_every=78, seed=10, counter=NoCounter()):
+    def __init__(
+            self,
+            number_of_players=1,
+            number_of_decks=6,
+            shuffle_every=78,
+            seed=10,
+            counter=NoCounter(),
+            blackjack_reward=1.5
+    ):
+        self.blackjack_reward = blackjack_reward
         self.deck = Deck(number_of_decks, shuffle_every, seed=seed, counter=counter)
         self.shuffle_every = shuffle_every
         self.number_of_decks = number_of_decks
@@ -88,7 +97,6 @@ class Dealer:
 
         # pour le blackjack américain il faut rajouter ça ici:
         # self.dealer_cards.append(self.deck.next_card())
-
 
         for i in range(self.number_of_players):
             self.player_playing = i
