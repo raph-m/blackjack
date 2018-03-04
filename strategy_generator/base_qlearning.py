@@ -15,20 +15,6 @@ At the beginning of each episode, we choose radomly a state.
 dealer = Dealer(seed=0)
 actions = ["hit", "stick", "double", "split"]
 
-def cmp(a,b):
-    #returns 1 if a>b, 0 if a==b and -1 if a<b
-    return float(a>b)-float(a<b)
-
-def handle_done(res, Q):
-    dealer_cards = res["dealer_hand"]
-    player_cards = res["hands"][0][0]
-    reward = int(sum(res["rewards"][0]))
-    state = encoding(player_cards, [dealer_cards[0]])
-    for action in actions:
-        pair = (state,action)
-        Q[pair] =0
-    return Q
-
 def update_Q(Q, state, state_tmp, action, reward, alpha, gamma):
     maxi = 0
     for act in actions:
@@ -70,7 +56,12 @@ def choose_action(state, Q, epsilon):
 def episode(Q, epsilon, alpha, gamma):
     res = dealer.reset()
     if res["done"]:
-        Q = handle_done(res, Q)
+        dealer_cards = res["dealer_hand"]
+        player_cards = res["hands"][0][0]
+        reward = int(sum(res["rewards"][0]))
+        state = encoding(player_cards, [dealer_cards[0]])
+        pair = (state,"stick")
+        Q[pair] = reward
     else:
         player_playing = res["player_playing"]
         hand_playing = res["hand_playing"]
@@ -81,7 +72,12 @@ def episode(Q, epsilon, alpha, gamma):
             action = choose_action(state, Q, epsilon)
             res = dealer.step(action)
             if res["done"]:
-                Q = handle_done(res, Q)
+                pair = (state, action)
+                reward = int(sum(res["rewards"][0]))
+                if pair in Q:
+                    Q[pair] = Q[pair]*(1-alpha) + alpha*reward
+                else:
+                    Q[pair] = alpha*reward
                 break
             player_playing = res["player_playing"]
             hand_playing = res["hand_playing"]
