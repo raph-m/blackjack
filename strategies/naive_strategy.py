@@ -289,7 +289,7 @@ def plot_counter(n=100, seed=300):
     return nb_events, rewards
 
 
-def plot_counter_parallel(n):
+def plot_counter_parallel(n, show=True):
     pool = Pool()
     print("N processes: "+str(pool._processes))
     tasks = []
@@ -320,14 +320,21 @@ def plot_counter_parallel(n):
     for k, v in nb_events.items():
         rewards[k] /= nb_events[k]
 
-    print(rewards)
-
     ks = []
     vs = []
     for k, v in rewards.items():
-        if nb_events[k] > 100:
+        if nb_events[k] > 10000:
             ks.append(k)
             vs.append(v)
 
-    plt.scatter(ks, vs)
-    plt.show()
+    if show:
+        plt.scatter(ks, vs)
+        plt.show()
+
+    else:
+        print(nb_events)
+        print(rewards)
+        with open("temp_results/nb_events.json", "w") as fp:
+            json.dump(nb_events, fp)
+        with open("temp_results/rewards.json", "w") as fp:
+            json.dump(nb_events, fp)

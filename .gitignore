@@ -102,3 +102,5 @@ ENV/
 
 .idea
 camboui.py
+/temp_results/nb_events.json
+/temp_results/rewards.json
