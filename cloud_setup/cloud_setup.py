@@ -10,6 +10,7 @@ sudo easy_install3 pip
 sudo pip3 install numpy
 sudo pip3 install matplotlib
 sudo pip3 install scikit-optimize
+sudo pip3 install pandas
 git clone https://github.com/raph-m/blackjack
 cd blackjack
 """

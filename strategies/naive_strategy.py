@@ -282,12 +282,12 @@ def blackjack_counter(n=100, seed=300):
 
 def plot_counter(n=100, seed=300):
 
-    dealer = Dealer(number_of_decks=2, shuffle_every=78, counter=ThorpCounter(), seed=seed)
+    dealer = Dealer(number_of_decks=3, shuffle_every=60, counter=ThorpCounter(), seed=seed)
 
     nb_events = {}
     rewards = {}
     done = False
-    counts_to_compute = range(-16, 20)
+    counts_to_compute = range(-16, 15)
 
     for i in counts_to_compute:
         nb_events[i] = 0
