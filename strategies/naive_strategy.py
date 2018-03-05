@@ -275,7 +275,7 @@ def plot_counter(n=100, seed=300):
     nb_events = {}
     rewards = {}
     done = False
-    counts_to_compute = range(-16, 15)
+    counts_to_compute = range(-16, 20)
 
     for i in counts_to_compute:
         nb_events[i] = 0
