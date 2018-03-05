@@ -3,7 +3,11 @@ from strategies.naive_strategy import plot_counter_parallel
 from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp
 
 famous_counters = [default_thorp, hi_opt_1, hi_opt_2, ko, omega_2]
+famous_counters.append({1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1})
+famous_counters.append({1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0})
 famous_counters_names = ["default_thorp", "hi_opt_1", "hi_opt_2", "ko", "omega_2"]
+famous_counters_names.append("my_5_level_counter_with_b=6")
+famous_counters_names.append("my_3_level_counter_with_b=6")
 ratio = []
 
 number_of_decks = 4
