@@ -22,7 +22,7 @@ ratio = delta / n
 
 # Counter parallel
 n = int(1e5)
-id_ = "2decks"
+id_ = "6decks"
 number_of_decks = 6
 shuffle_every = 80
 start = time.time()
