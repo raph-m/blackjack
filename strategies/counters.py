@@ -23,7 +23,7 @@ for i in range(1, 14):
 
 
 class ThorpCounter:
-    def __init__(self):
+    def __init__(self, ):
         self.rc = 0
 
     def increment(self, card):

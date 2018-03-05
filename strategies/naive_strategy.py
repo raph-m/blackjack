@@ -389,7 +389,8 @@ def evaluate_counting_strategy(
         number_of_decks=number_of_decks,
         shuffle_every=shuffle_every,
         seed=seed,
-        number_of_players=number_of_players
+        number_of_players=number_of_players,
+        counter=ThorpCounter()
     )
     total = 0.0
     for i in range(n):
@@ -434,11 +435,13 @@ def parallel_evaluate_counting_strategy(
     return np.sum(results)
 
 
-def read_counter_results():
-    with open("temp_results/nb_events.json", "r") as fp:
+def read_counter_results(id=''):
+    with open("temp_results/nb_events"+id+".json", "r") as fp:
         nb_events = json.load(fp)
-    with open("temp_results/rewards.json", "r") as fp:
+    with open("temp_results/rewards"+id+".json", "r") as fp:
         rewards = json.load(fp)
+    with open("temp_results/params"+id+".json", "r") as fp:
+        params = json.load(fp)
 
     print(nb_events)
     print(rewards)
@@ -461,7 +464,8 @@ def read_counter_results():
     vs = vs[order]
 
     plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
-    plt.title("average reward vs value of the counter at the beginning of the game")
+    plt.plot(ks, ks * 0)
+    plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"]))
     plt.xlabel("counter")
     plt.ylabel("average reward")
     plt.show()
