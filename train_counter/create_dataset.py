@@ -14,8 +14,8 @@ def generate_dataset(n, seed=0, number_of_decks=2, shuffle_every=80):
         dealer.shuffle_if_needed()
         rc = dealer.deck.counter.get_rc()
 
-        for j in range(1, 14):
-            dataset[i, j] = rc[j]
+        for j in range(0, 13):
+            dataset[i, j] = rc[j+1]
         r, p_blackjacks, d_blackjack, d_burst = simple_play_2(dealer, strategy={"name": "basic"})
 
         dataset[i, 13] = r
@@ -55,4 +55,4 @@ def generate_dataset_parallel(n, n_processes=None, id='', number_of_decks=2, shu
         current_data = pd.DataFrame(tasks[i].get(), columns=names)
         data = pd.concat([data, current_data])
 
-    data.to_csv("data/dataset_"+str(n)+".csv")
+    data.to_csv("data/dataset_"+str(n)+"_n_deck_"+str(number_of_decks)+"_shuffle_"+str(shuffle_every)+".csv")

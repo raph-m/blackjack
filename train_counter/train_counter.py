@@ -1,7 +1,11 @@
 import random
 from train_counter.counter import loss
 import numpy as np
-
+import pandas as pd
+from sklearn import linear_model
+from sklearn.model_selection import train_test_split
+import time
+import json
 
 def update_weights(x, y, w, b):
     good = False
@@ -98,3 +102,38 @@ def train(df, iterations=50, init="zero"):
     print("\nthis model loss is: "+str(loss(x, y, w, b)))
 
     return w, b
+
+def train_w_ridge(name):
+    data = pd.read_csv("data/"+name)
+    name = name.split("_")
+    n_deck = name[4]
+    tmp = name[6].split(".")
+    shuffle = tmp[0]
+    #print (data.describe())
+    x_cols = [str(i) for i in range(1, 14)]
+    X = data[x_cols].values
+    y = data["reward"].values
+    coef = np.zeros(13)
+    intercept = 0
+    score = 0
+    for i in range(1000):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        reg = linear_model.Ridge(alpha=0.5, normalize=True, fit_intercept=True , solver='cholesky')
+        #beg = time.time()
+        reg.fit(X_train, y_train)
+        score += reg.score(X_test, y_test)/10
+        coef += reg.coef_
+        intercept += reg.intercept_
+        #end = time.time()
+    print ("mean score:", score)
+    print ("mean coefs:", coef)
+    print ("mean intercept:", intercept)
+    with open("temp_results/res_"+n_deck+"_"+shuffle+".json", "w") as fp:
+        json.dump(
+        {
+            "intercept": str(intercept),
+            "coefs": str(coef)
+        },
+        fp
+        )
+    #print(end-beg)
