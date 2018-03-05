@@ -8,7 +8,7 @@ import json
 
 epochs = 10000000
 epochs = 1000000
-n_exp = 100000
+n_exp = 1000000
 
 
 def function_mc(x):

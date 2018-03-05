@@ -404,18 +404,22 @@ def read_counter_results():
     print(rewards)
     ks = []
     vs = []
+    y_error = []
     for k, v in rewards.items():
         if nb_events[k] > 1000:
             ks.append(k)
             vs.append(v)
+            y_error.append(nb_events[k])
 
     ks = np.array(ks).astype(int)
     vs = np.array(vs)
+    y_error = np.array(y_error)
+    y_error = 1 / np.sqrt(y_error)
 
     order = np.argsort(ks)
     ks = ks[order]
     vs = vs[order]
 
-    plt.scatter(ks, vs)
+    plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
     plt.show()
 
