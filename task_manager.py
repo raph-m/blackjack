@@ -3,9 +3,9 @@ from strategies.naive_strategy import plot_counter_parallel
 
 
 # Counter parallel
-n = 1e3
+n = int(1e3)
 id_ = "test"
-number_of_decks = 2
+number_of_decks = 6
 shuffle_every = 80
 start = time.time()
 print("Running plot_counter_parallel with n = "+str(n))
@@ -23,7 +23,7 @@ ratio = delta / n
 # Counter parallel
 n = int(1e5)
 id_ = "2decks"
-number_of_decks = 2
+number_of_decks = 6
 shuffle_every = 80
 start = time.time()
 print("Running plot_counter_parallel with n = "+str(n))
