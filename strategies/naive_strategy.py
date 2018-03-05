@@ -281,9 +281,9 @@ def blackjack_counter(n=100, seed=300):
     return nb_events, rewards, dealer_blackjacks, player_blackjacks, dealer_burst
 
 
-def plot_counter(n=100, seed=300):
+def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104):
 
-    dealer = Dealer(number_of_decks=2, shuffle_every=80, counter=ThorpCounter(), seed=seed)
+    dealer = Dealer(number_of_decks=number_of_decks, shuffle_every=shuffle_every, counter=ThorpCounter(), seed=seed)
 
     nb_events = {}
     rewards = {}
@@ -311,12 +311,15 @@ def plot_counter(n=100, seed=300):
                     for i in counts_to_compute:
                         if nb_events[i] < n:
                             done = False
-                    break
+                    if done:
+                        break
+                    else:
+                        continue
 
     return nb_events, rewards
 
 
-def plot_counter_parallel(n, show=True, n_processes=None, id=''):
+def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks=3, shuffle_every=104):
     if n_processes:
         pool = Pool(n_processes)
     else:
@@ -329,7 +332,9 @@ def plot_counter_parallel(n, show=True, n_processes=None, id=''):
     for i in range(n_tasks):
         kwds = {
             "seed": seeds[i],
-            "n": int(n/n_tasks)
+            "n": int(n/n_tasks),
+            "number_of_decks": number_of_decks,
+            "shuffle_every": shuffle_every,
         }
         tasks.append(pool.apply_async(plot_counter, kwds=kwds))
     pool.close()
@@ -367,18 +372,28 @@ def plot_counter_parallel(n, show=True, n_processes=None, id=''):
             json.dump(nb_events, fp)
         with open("temp_results/rewards"+id+".json", "w") as fp:
             json.dump(rewards, fp)
+        with open("temp_results/params"+id+".json", "w") as fp:
+            json.dump({"number_of_decks": number_of_decks, "shuffle_every": shuffle_every}, fp)
 
 
-def evaluate_counting_strategy(n=1000, strategy=None, bet_mapping=None, seed=1):
-    dealer = Dealer(number_of_decks=3, shuffle_every=100, seed=seed)
+def evaluate_counting_strategy(
+        n=1000,
+        strategy=None,
+        bet_mapping=None,
+        seed=1,
+        number_of_decks=3,
+        shuffle_every=104,
+        bet_ratio=200
+):
+    dealer = Dealer(number_of_decks=number_of_decks, shuffle_every=shuffle_every, seed=seed)
     total = 0.0
     for i in range(n):
         count = dealer.deck.counter.get_rc()
-        total += simple_play(dealer, strategy, mean=False) * bet_mapping[count]
+        total += simple_play(dealer, strategy, mean=False) * (1 + bet_mapping[count] * (bet_ratio - 1))
     return total
 
 
-def parallel_evaluate_counting_strategy(strategy, n, bet_mapping):
+def parallel_evaluate_counting_strategy(strategy, n, bet_mapping, number_of_decks=3, shuffle_every=104, bet_ratio=200):
     """
     :param strategy: (dict) la stratégie à tester
     :param n: (int) nombre d'essais
@@ -393,9 +408,12 @@ def parallel_evaluate_counting_strategy(strategy, n, bet_mapping):
     for i in range(n_tasks):
         kwds = {
             "strategy": strategy,
-            "bet_mapping": bet_mapping,
             "seed": seeds[i],
-            "n": int(n/n_tasks)
+            "n": int(n/n_tasks),
+            "number_of_decks": number_of_decks,
+            "shuffle_every": shuffle_every,
+            "bet_ratio": bet_ratio,
+            "bet_mapping": bet_mapping
         }
         tasks.append(pool.apply_async(evaluate_counting_strategy, kwds=kwds))
     pool.close()
@@ -433,4 +451,7 @@ def read_counter_results():
     vs = vs[order]
 
     plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
+    plt.title("average reward vs value of the counter at the beginning of the game")
+    plt.xlabel("counter")
+    plt.ylabel("average reward")
     plt.show()

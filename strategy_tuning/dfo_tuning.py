@@ -32,23 +32,27 @@ def tune(algo):
     if algo == "MC":
         res = gp_minimize(function_mc, [(0, 1)], n_calls=30, x0=[0.5], verbose=True)
         with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
-            json.dump({"algorithm": algo,
-                "epsilon" : res.x,
-                "value function" : -res.fun},
+            json.dump({
+                "algorithm": algo,
+                "epsilon": res.x,
+                "value function": -res.fun
+            },
                 fp)
-        #print ('best epsilon is:', res.x)
-        #print ('best expectancy is:', - res.fun)
-    if algo == "qlearn" :
-        res = gp_minimize(function_qlearn, [(0, .2),(0,.2),(.8,1)], n_calls=30, verbose=True)
+        #  print ('best epsilon is:', res.x)
+        #  print ('best expectancy is:', - res.fun)
+    if algo == "qlearn":
+        res = gp_minimize(function_qlearn, [(0, .2), (0, .2), (.8, 1)], n_calls=30, verbose=True)
         epsilon, alpha, gamma = res.x
         with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
-            json.dump({"algorithm" : algo,
-                "epsilon" : epsilon,
-                "alpha" : alpha,
-                "gamma" : gamma,
-                "value function" : -res.fun},
+            json.dump({
+                "algorithm": algo,
+                "epsilon": epsilon,
+                "alpha": alpha,
+                "gamma": gamma,
+                "value function": -res.fun
+            },
                 fp)
-        #print ('best epsilon is:', epsilon)
-        #print ('best alpha is:', alpha)
-        #print ('best gamma is:', gamma)
-        #print ('best expectancy is:', - res.fun)
+        #  print ('best epsilon is:', epsilon)
+        #  print ('best alpha is:', alpha)
+        #  print ('best gamma is:', gamma)
+        #  print ('best expectancy is:', - res.fun)

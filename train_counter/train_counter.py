@@ -8,7 +8,7 @@ def update_weights(x, y, w, b):
     x1, x2 = random.sample(range(1, 14), 2)
     while not good:
         good = True
-        x1, x2 = random.sample(range(1, 14), 2)
+        x1, x2 = random.sample(range(0, 12), 2)
         if w[x1] == w[x2]:
             if w[x1] in [-1, 1]:
                 good = False
@@ -33,10 +33,10 @@ def update_weights(x, y, w, b):
         score_2 = loss(x, y, w_2, b)
 
         if score_0 > score_1 and score_0 > score_2:
-            return w
+            return w_0
         if score_1 >= score_2:
-            return score_1
-        return score_2
+            return w_1
+        return w_2
 
     w_1 = w.copy()
     w_1[x1] = w[x2]
