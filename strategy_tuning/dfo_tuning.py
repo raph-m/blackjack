@@ -6,10 +6,9 @@ import numpy as np
 from skopt import gp_minimize
 import json
 
-epochs = 10000000
 epochs = 1000000
-n_exp = 1000000
-
+n_exp = 1000
+n_calls = 30
 
 def function_mc(x):
     dealer = Dealer(seed=10)
@@ -30,23 +29,26 @@ def function_qlearn(x):
 def tune(algo):
     alg = "DFO"
     if algo == "MC":
-        res = gp_minimize(function_mc, [(0, 1)], n_calls=30, x0=[0.5], verbose=True)
+        res = gp_minimize(function_mc, [(0, 1)], n_calls=n_calls, x0=[0.5], verbose=True)
+        epsilon = res.x[0]
         with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
             json.dump({"algorithm": algo,
-                "epsilon" : res.x,
-                "value function" : -res.fun},
+                "epsilon" : epsilon,
+                "value function" : -res.fun
+                },
                 fp)
         #print ('best epsilon is:', res.x)
         #print ('best expectancy is:', - res.fun)
     if algo == "qlearn" :
-        res = gp_minimize(function_qlearn, [(0, .2),(0,.2),(.8,1)], n_calls=30, verbose=True)
+        res = gp_minimize(function_qlearn, [(0, .2),(0,.2),(.8,1)], n_calls=n_calls, verbose=True)
         epsilon, alpha, gamma = res.x
         with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
             json.dump({"algorithm" : algo,
                 "epsilon" : epsilon,
                 "alpha" : alpha,
                 "gamma" : gamma,
-                "value function" : -res.fun},
+                "value function" : -res.fun
+                },
                 fp)
         #print ('best epsilon is:', epsilon)
         #print ('best alpha is:', alpha)
