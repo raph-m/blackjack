@@ -117,6 +117,20 @@ def basic_strategy(hand, dealer_hand, strategy, can_split=True):
         #     return hit
 
 
+def save_base_policy():
+    policy = {}
+    for i in range(1,11):
+        for j in range(1,11):
+            for k in range(1,11):
+                player = [i,j]
+                dealer = [k]
+                state = encoding(player, dealer, can_split=True)
+                enc = state.split(".")
+                if int(enc[1])!=0:
+                    policy[state] = basic_strategy(player, dealer, None, True)
+    with open("strategy_tuning/base_wiki_policy.json", "w") as fp:
+        json.dump(policy, fp)
+
 def naive_strategy(hand, dealer_hand, strategy):
     if get_score(hand) > strategy["k"]:
         return "stick"
@@ -408,4 +422,3 @@ def read_counter_results():
 
     plt.scatter(ks, vs)
     plt.show()
-

@@ -93,7 +93,7 @@ def check_encoding():
 
 
 def visualizePolicy(policy):
-    pair, soft, hard = np.zeros((10,10)), np.zeros((10,10)), np.zeros((18,10))
+    pair, soft, hard = np.zeros((10,10)), np.zeros((8,10)), np.zeros((17,10))
     actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
     pol = dict(policy)
     del pol["epochs"]
@@ -102,20 +102,36 @@ def visualizePolicy(policy):
         encoded = state.split(".")
         typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
         if typ == "pair" :
-            pair[player-1, dealer-1] = actions_space[policy[state]]
-        elif typ == "soft" :
-            soft[player-13, dealer-1] = actions_space[policy[state]]
-        elif typ == "hard" :
-            hard[player-4, dealer-1] = actions_space[policy[state]]
+            pair[10-player, dealer-1] = actions_space[policy[state]]
+        elif typ == "soft" and player < 21:
+            soft[20-player, dealer-1] = actions_space[policy[state]]
+        elif typ == "hard" and player < 21:
+            hard[20-player, dealer-1] = actions_space[policy[state]]
+
+    rpAs = pair[-1,:].reshape(1,10)
+    pair = np.r_[rpAs, pair]
+    pair = np.delete(pair, -1, axis=0)
+    cpAs = pair[:,0].reshape(10,1)
+    pair = np.append(pair, cpAs, axis=1)
+    pair = np.delete(pair, 0, axis=1)
+
+    csAs = soft[:,0].reshape(8,1)
+    soft = np.append(soft, csAs, axis=1)
+    soft = np.delete(soft, 0, axis=1)
+
+    chAs = hard[:,0].reshape(17,1)
+    hard = np.append(hard, chAs, axis=1)
+    hard = np.delete(hard, 0, axis=1)
 
     x = np.arange(10)
-    yh = np.arange(18)
-    dlabel = ["As", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    plabel = ["As,As", "2,2", "3,3", "4,4", "5,5", "6,6", "7,7", "8,8", "9,9",
-        "10,10"]
-    slabel = ["13", "14", "15", "16", "17", "18", "19", "20", "21", "BJ"]
-    hlabel = ["4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
-        "16", "17", "18", "19", "20", "21"]
+    ys = np.arange(8)
+    yh = np.arange(17)
+    dlabel = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "As"]
+    plabel = ["As,As", "10,10","9,9", "8,8", "7,7", "6,6", "5,5", "4,4", "3,3",
+        "2,2"]
+    slabel = ["20", "19", "18", "17", "16", "15", "14", "13"]
+    hlabel = ["20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10",
+        "9", "8", "7", "6", "5", "4"]
     plt.matshow(pair)
     plt.xlabel("dealer card")
     plt.ylabel("player hand")
@@ -130,7 +146,7 @@ def visualizePolicy(policy):
     plt.title("base strategy with soft hands \n violet : hit, blue : stick, "
         + "yellow : double")
     plt.xticks(x, dlabel)
-    plt.yticks(x, slabel)
+    plt.yticks(ys, slabel)
 
     plt.matshow(hard)
     plt.xlabel("dealer card")
