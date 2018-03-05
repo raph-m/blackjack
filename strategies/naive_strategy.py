@@ -281,14 +281,14 @@ def blackjack_counter(n=100, seed=300):
     return nb_events, rewards, dealer_blackjacks, player_blackjacks, dealer_burst
 
 
-def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104):
+def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104, counter=ThorpCounter()):
 
-    dealer = Dealer(number_of_decks=number_of_decks, shuffle_every=shuffle_every, counter=ThorpCounter(), seed=seed)
+    dealer = Dealer(number_of_decks=number_of_decks, shuffle_every=shuffle_every, counter=counter, seed=seed)
 
     nb_events = {}
     rewards = {}
     done = False
-    counts_to_compute = range(-16, 15)
+    counts_to_compute = range(-12, 12)
 
     for i in counts_to_compute:
         nb_events[i] = 0
@@ -318,7 +318,7 @@ def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104):
     return nb_events, rewards
 
 
-def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks=3, shuffle_every=104):
+def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks=3, shuffle_every=104, counter=ThorpCounter()):
     if n_processes:
         pool = Pool(n_processes)
     else:
@@ -334,6 +334,7 @@ def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks
             "n": int(n/n_tasks),
             "number_of_decks": number_of_decks,
             "shuffle_every": shuffle_every,
+            "counter": counter
         }
         tasks.append(pool.apply_async(plot_counter, kwds=kwds))
     pool.close()
@@ -383,14 +384,15 @@ def evaluate_counting_strategy(
         number_of_decks=3,
         shuffle_every=104,
         bet_ratio=200,
-        number_of_players=5
+        number_of_players=5,
+        counter=ThorpCounter()
 ):
     dealer = Dealer(
         number_of_decks=number_of_decks,
         shuffle_every=shuffle_every,
         seed=seed,
         number_of_players=number_of_players,
-        counter=ThorpCounter()
+        counter=counter
     )
     total = 0.0
     for i in range(n):
@@ -407,7 +409,8 @@ def parallel_evaluate_counting_strategy(
         number_of_decks=3,
         shuffle_every=104,
         bet_ratio=200,
-        number_of_players=5
+        number_of_players=5,
+        counter=ThorpCounter()
 ):
     pool = Pool()
     print("N processes: "+str(pool._processes))
@@ -424,7 +427,8 @@ def parallel_evaluate_counting_strategy(
             "shuffle_every": shuffle_every,
             "bet_ratio": bet_ratio,
             "bet_mapping": bet_mapping,
-            "number_of_players": number_of_players
+            "number_of_players": number_of_players,
+            "counter": counter
         }
         tasks.append(pool.apply_async(evaluate_counting_strategy, kwds=kwds))
     pool.close()

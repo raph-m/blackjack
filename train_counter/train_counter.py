@@ -103,6 +103,7 @@ def train(df, iterations=50, init="zero"):
 
     return w, b
 
+
 def train_w_ridge(name):
     data = pd.read_csv("data/"+name)
     name = name.split("_")
