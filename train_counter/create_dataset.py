@@ -7,8 +7,8 @@ from strategies.counters import CountAllCards
 from strategies.naive_strategy import simple_play_2
 
 
-def generate_dataset(n, seed=0, number_of_decks=2, shufle_every=70):
-    dealer = Dealer(counter=CountAllCards(), seed=seed)
+def generate_dataset(n, seed=0, number_of_decks=2, shuffle_every=80):
+    dealer = Dealer(counter=CountAllCards(), seed=seed, number_of_decks=number_of_decks, shuffle_every=shuffle_every)
     dataset = np.zeros((n, 17))
     for i in range(n):
         rc = dealer.deck.counter.get_rc()
@@ -25,7 +25,7 @@ def generate_dataset(n, seed=0, number_of_decks=2, shufle_every=70):
     return dataset
 
 
-def generate_dataset_parallel(n, n_processes=None, id='', number_of_decks=2, shufle_every=70):
+def generate_dataset_parallel(n, n_processes=None, id='', number_of_decks=2, shuffle_every=80):
     if n_processes:
         pool = Pool(n_processes)
     else:
@@ -38,7 +38,9 @@ def generate_dataset_parallel(n, n_processes=None, id='', number_of_decks=2, shu
     for i in range(n_tasks):
         kwds = {
             "seed": seeds[i],
-            "n": int(n/n_tasks)
+            "n": int(n/n_tasks),
+            "number_of_decks": number_of_decks,
+            "shuffle_every": shuffle_every
         }
         tasks.append(pool.apply_async(generate_dataset, kwds=kwds))
     pool.close()

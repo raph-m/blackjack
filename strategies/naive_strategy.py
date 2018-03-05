@@ -383,9 +383,15 @@ def evaluate_counting_strategy(
         seed=1,
         number_of_decks=3,
         shuffle_every=104,
-        bet_ratio=200
+        bet_ratio=200,
+        number_of_players=5
 ):
-    dealer = Dealer(number_of_decks=number_of_decks, shuffle_every=shuffle_every, seed=seed)
+    dealer = Dealer(
+        number_of_decks=number_of_decks,
+        shuffle_every=shuffle_every,
+        seed=seed,
+        number_of_players=number_of_players
+    )
     total = 0.0
     for i in range(n):
         count = dealer.deck.counter.get_rc()
@@ -393,12 +399,15 @@ def evaluate_counting_strategy(
     return total
 
 
-def parallel_evaluate_counting_strategy(strategy, n, bet_mapping, number_of_decks=3, shuffle_every=104, bet_ratio=200):
-    """
-    :param strategy: (dict) la stratégie à tester
-    :param n: (int) nombre d'essais
-    :return: (float) l'espérance de cette stratégie
-    """
+def parallel_evaluate_counting_strategy(
+        strategy,
+        n,
+        bet_mapping,
+        number_of_decks=3,
+        shuffle_every=104,
+        bet_ratio=200,
+        number_of_players=5
+):
     pool = Pool()
     print("N processes: "+str(pool._processes))
     tasks = []
@@ -413,7 +422,8 @@ def parallel_evaluate_counting_strategy(strategy, n, bet_mapping, number_of_deck
             "number_of_decks": number_of_decks,
             "shuffle_every": shuffle_every,
             "bet_ratio": bet_ratio,
-            "bet_mapping": bet_mapping
+            "bet_mapping": bet_mapping,
+            "number_of_players": number_of_players
         }
         tasks.append(pool.apply_async(evaluate_counting_strategy, kwds=kwds))
     pool.close()
