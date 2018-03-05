@@ -20,7 +20,7 @@ policy["name"] = "my_basic"
 policy["epochs"] = epochs
 """
 
-
+"""
 # Load a strategy designed with n epochs
 epochs = 100000000
 alpha = 10
@@ -29,9 +29,9 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "r") as fp:
 
 print(policy["soft.19.4"])
 policy["name"] = "my_basic"
+"""
 
-
-
+"""
 #save wiki base strategy the load it
 from strategies.naive_strategy import save_base_policy
 #save_base_policy()
@@ -39,7 +39,7 @@ with open("strategy_tuning/base_wiki_policy.json", "r") as fp:
     policy_2 = json.load(fp)
 policy_2["name"] = "wiki_base"
 policy_2["epochs"] = 0
-
+"""
 
 """
 # Evaluate the policy with parallel computing
@@ -82,8 +82,41 @@ for i in range(10):
     print("")
 """
 
-
+"""
 # Visualize the policy in 3 figures for pairs, soft hands and hard hands
 from util.tools import visualizePolicy
 visualizePolicy(policy)
 visualizePolicy(policy_2)
+"""
+
+"""
+#create n play for count learning
+import time
+n = int(1e6)
+from train_counter.create_dataset import generate_dataset_parallel
+start = time.time()
+generate_dataset_parallel(n, number_of_decks=4, shuffle_every=52)
+generate_dataset_parallel(n)
+end = time.time()
+print(end-start)
+"""
+
+
+from train_counter.train_counter import train_w_ridge
+train_w_ridge("dataset_1000000_n_deck_2_shuffle_80.csv")
+train_w_ridge("dataset_1000000_n_deck_4_shuffle_52.csv")
+
+# results for 2 decks, shuffle 80
+# coefs: [-1.54658578, 1.46565743, 1.64606452, 2.06966632, 2.21852635, 2.25132327, 0.88227194, 0.4281363, -0.85675855, -2.3969003, -1.91884622, -2.27488822, -2.06085728]
+# intercept: -5.8449593318
+# thus we can choose -uncentered and with 5 levels- w = {1: -2, 2: 1, 3: 2, 4: 2, 5: 2, 6: 2, 7: 1, 8: 0, 9: -1, 10: -2, 11: -2, 12: -2, 13: -2}
+# or -centered and with 5 levels- w = {1: -2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2, 7: 1, 8: 0, 9: -1, 10: -2, 11: -2, 12: -2, 13: -2}
+# or -centered and with 3 levels- w = {1: -1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 0, 8: 0, 9: 0, 10: -1, 11: -1, 12: -1, 13: -1}
+# for each of them, the threshold is 6
+
+# results for 4 decks, shuffle 52
+# coefs: [-0.43015842, -0.14951642, 0.75302885, 1.45367159, 1.69597542, 0.71873267, 0.0932644, -0.18514274, -0.77762071, -1.90319907, 0.05352541, -1.38579426, -0.76848075]
+# intercept: -6.93728315673
+# thus we can choose -5 levels- w = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1}
+# or -3 levels- w = {1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0}
+# for this situation, we can choose a threshold of 6 or 7 (to be decided)
