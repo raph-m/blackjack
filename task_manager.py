@@ -8,7 +8,7 @@ famous_counters.append({1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10
 famous_counters_names = ["default_thorp", "hi_opt_1", "hi_opt_2", "ko", "omega_2"]
 famous_counters_names.append("my_5_level_counter_with_b=6")
 famous_counters_names.append("my_3_level_counter_with_b=6")
-ratio = []
+ratios = []
 
 number_of_decks = 4
 shuffle_every = 52
@@ -29,11 +29,11 @@ for i in range(len(famous_counters)):
     print("done in: "+str(end-start) + " seconds")
     print("")
 
-    ratio.append((end - start) / n)
+    ratios.append((end - start) / n)
 
 n = int(1e5)
 for i in range(len(famous_counters)):
-    ratio = ratio[i]
+    ratio = ratios[i]
 
     # Counter parallel
     id_ = famous_counters_names[i]
