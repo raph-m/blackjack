@@ -20,7 +20,7 @@ policy["name"] = "my_basic"
 policy["epochs"] = epochs
 """
 
-"""
+
 # Load a strategy designed with n epochs
 epochs = 100000000
 alpha = 10
@@ -29,17 +29,17 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "r") as fp:
 
 print(policy["soft.19.4"])
 policy["name"] = "my_basic"
-"""
 
-"""
+
+
 #save wiki base strategy the load it
 from strategies.naive_strategy import save_base_policy
 #save_base_policy()
 with open("strategy_tuning/base_wiki_policy.json", "r") as fp:
-    policy = json.load(fp)
-policy["name"] = "wiki_base"
-policy["epochs"] = 0
-"""
+    policy_2 = json.load(fp)
+policy_2["name"] = "wiki_base"
+policy_2["epochs"] = 0
+
 
 """
 # Evaluate the policy with parallel computing
@@ -53,13 +53,13 @@ print("parallel time: ")
 print(end-start)
 """
 
-
+"""
 # implement dfo to find the best hyper parameters for MC and Q-learning
 from strategy_tuning.dfo_tuning import tune
 tune("qlearn")
 # results: epsilon = 0.1989, alpha = 0.0362, gamma = 0.9587
 tune("MC")
-
+"""
 
 """
 # how to use the card counter:
@@ -82,8 +82,8 @@ for i in range(10):
     print("")
 """
 
-"""
+
 # Visualize the policy in 3 figures for pairs, soft hands and hard hands
 from util.tools import visualizePolicy
 visualizePolicy(policy)
-"""
+visualizePolicy(policy_2)
