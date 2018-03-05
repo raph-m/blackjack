@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
+import pandas as pd
 
 
 def get_value(cards):
@@ -140,3 +141,30 @@ def visualizePolicy(policy):
     plt.xticks(x, dlabel)
     plt.yticks(yh, hlabel)
     plt.show()
+
+
+def change_datatype(df, int_cols=None):
+    if not int_cols:
+        int_cols = list(df.select_dtypes(include=['int']).columns)
+    for col in int_cols:
+        if ((np.max(df[col]) <= 127) and(np.min(df[col] >= -128))):
+            df[col] = df[col].astype(np.int8)
+        elif ((np.max(df[col]) <= 32767) and(np.min(df[col] >= -32768))):
+            df[col] = df[col].astype(np.int16)
+        elif ((np.max(df[col]) <= 2147483647) and(np.min(df[col] >= -2147483648))):
+            df[col] = df[col].astype(np.int32)
+        else:
+            df[col] = df[col].astype(np.int64)
+
+
+def change_datatype_float(df, float_cols=None):
+    if not float_cols:
+        int_cols = list(df.select_dtypes(include=['int']).columns)
+    float_cols = list(df.select_dtypes(include=['float']).columns)
+    for col in float_cols:
+        df[col] = df[col].astype(np.float32)
+
+
+def memory_usage(df):
+    mem = df.memory_usage(index=True).sum()
+    return mem / 1024**2, " MB"

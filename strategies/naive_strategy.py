@@ -172,8 +172,6 @@ def simple_play_2(dealer, strategy):
         action = choose_action(hand, dealer_cards, strategy=strategy, can_split=can_split)
         res = dealer.step(action)
 
-    print("hello")
-    print(res)
     player_blackjacks = [get_score(cards) for cards in res["hands"][0]]
     player_blackjacks = [s == 22 for s in player_blackjacks]
     player_blackjacks = [1 if s else 0 for s in player_blackjacks]
@@ -270,7 +268,7 @@ def blackjack_counter(n=100, seed=300):
 
 def plot_counter(n=100, seed=300):
 
-    dealer = Dealer(counter=ThorpCounter(), seed=seed)
+    dealer = Dealer(number_of_decks=2, shuffle_every=78, counter=ThorpCounter(), seed=seed)
 
     nb_events = {}
     rewards = {}

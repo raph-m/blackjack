@@ -71,3 +71,5 @@ blackjack/temp_results/nb_events.json
 
 apparemment on a un écart type de 1.14 sur les résultats des parties.
 Donc en gros le 1/sqrt(n) c'est une bonne approximation.
+
+nohup python3 -u task_manager.py > log.txt 2>&1 &

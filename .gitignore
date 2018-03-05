@@ -105,3 +105,5 @@ camboui.py
 /temp_results/nb_events.json
 /temp_results/rewards.json
 /tests/camboui.py
+/data/dataset_1000.csv
+/data/dataset_1000000.0.csv
