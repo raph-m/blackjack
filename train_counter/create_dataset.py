@@ -11,6 +11,7 @@ def generate_dataset(n, seed=0, number_of_decks=2, shuffle_every=80):
     dealer = Dealer(counter=CountAllCards(), seed=seed, number_of_decks=number_of_decks, shuffle_every=shuffle_every)
     dataset = np.zeros((n, 17))
     for i in range(n):
+        dealer.shuffle_if_needed()
         rc = dealer.deck.counter.get_rc()
 
         for j in range(1, 14):

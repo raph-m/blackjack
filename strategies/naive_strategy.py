@@ -295,26 +295,25 @@ def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104):
         rewards[i] = 0
 
     while not done:
-        i = 0
-        dealer.reset_completely()
-        while i < dealer.deck.shuffle_every - 10:
-            dealer.deck.next_card()
-            i += 1
-            count = dealer.deck.counter.get_rc()
-            if count in counts_to_compute:
-                if nb_events[count] < n:
-                    r = simple_play(dealer, strategy={"name": "basic"})
-                    nb_events[count] += 1
-                    rewards[count] += r
+        dealer.deck.next_card()
+        dealer.shuffle_if_needed()
+        count = dealer.deck.counter.get_rc()
 
-                    done = True
-                    for i in counts_to_compute:
-                        if nb_events[i] < n:
-                            done = False
-                    if done:
-                        break
-                    else:
-                        continue
+        if count in counts_to_compute:
+            if nb_events[count] < n:
+
+                r = simple_play(dealer, strategy={"name": "basic"})
+                nb_events[count] += 1
+                rewards[count] += r
+
+                done = True
+                for i in counts_to_compute:
+                    if nb_events[i] < n:
+                        done = False
+                if done:
+                    break
+                else:
+                    continue
 
     return nb_events, rewards
 
@@ -394,6 +393,7 @@ def evaluate_counting_strategy(
     )
     total = 0.0
     for i in range(n):
+        dealer.shuffle_if_needed()
         count = dealer.deck.counter.get_rc()
         total += simple_play(dealer, strategy, mean=False) * (1 + bet_mapping[count] * (bet_ratio - 1))
     return total
