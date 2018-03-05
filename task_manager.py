@@ -10,21 +10,21 @@ print("this should take a few seconds")
 print("started at "+str(start))
 plot_counter_parallel(n, show=False)
 end = time.time()
-print("done in: "+str(end-start))
+print("done in: "+str(end-start) + " seconds")
 print("")
 
 delta = end - start
 ratio = delta / n
 
 # Counter parallel
-n = 1e5
+n = 1e6
 start = time.time()
 print("Running plot_counter_parallel with n = "+str(n))
 print("this should take " + str(n * ratio / (60 * 60)) + " hours")
 print("started at "+str(start))
 plot_counter_parallel(n, show=False)
 end = time.time()
-print("done in: "+str(end-start))
+print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
 
 # implement dfo to find the best hyper parameters for MC and Q-learning
