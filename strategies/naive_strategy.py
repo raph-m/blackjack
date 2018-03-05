@@ -131,6 +131,7 @@ def save_base_policy():
     with open("strategy_tuning/base_wiki_policy.json", "w") as fp:
         json.dump(policy, fp)
 
+
 def naive_strategy(hand, dealer_hand, strategy):
     if get_score(hand) > strategy["k"]:
         return "stick"
@@ -282,7 +283,7 @@ def blackjack_counter(n=100, seed=300):
 
 def plot_counter(n=100, seed=300):
 
-    dealer = Dealer(number_of_decks=2, shuffle_every=70, counter=ThorpCounter(), seed=seed)
+    dealer = Dealer(number_of_decks=2, shuffle_every=80, counter=ThorpCounter(), seed=seed)
 
     nb_events = {}
     rewards = {}
@@ -295,7 +296,7 @@ def plot_counter(n=100, seed=300):
 
     while not done:
         i = 0
-        dealer.reset()
+        dealer.reset_completely()
         while i < dealer.deck.shuffle_every - 10:
             dealer.deck.next_card()
             i += 1
