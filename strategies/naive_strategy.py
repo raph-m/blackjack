@@ -288,21 +288,31 @@ def plot_counter(n=100, seed=300):
 
     nb_events = {}
     rewards = {}
+    done = False
+    counts_to_compute = range(-16, 20)
 
-    for i in range(n):
+    for i in counts_to_compute:
+        nb_events[i] = 0
+        rewards[i] = 0
+
+    while not done:
+        i = 0
         dealer.reset()
-        for j in range(50):
+        while i < dealer.deck.shuffle_every - 10:
             dealer.deck.next_card()
+            i += 1
+            count = dealer.deck.counter.get_rc()
+            if count in counts_to_compute:
+                if nb_events[count] < n:
+                    r = simple_play(dealer, strategy={"name": "basic"})
+                    nb_events[count] += 1
+                    rewards[count] += r
 
-        count = dealer.deck.counter.get_rc()
-        r = simple_play(dealer, strategy={"name": "basic"})
-
-        try:
-            nb_events[count] += 1
-            rewards[count] += r
-        except:
-            nb_events[count] = 1
-            rewards[count] = r
+                    done = True
+                    for i in counts_to_compute:
+                        if nb_events[i] < n:
+                            done = False
+                    break
 
     return nb_events, rewards
 
@@ -408,17 +418,21 @@ def read_counter_results():
     print(rewards)
     ks = []
     vs = []
+    y_error = []
     for k, v in rewards.items():
         if nb_events[k] > 1000:
             ks.append(k)
             vs.append(v)
+            y_error.append(nb_events[k])
 
     ks = np.array(ks).astype(int)
     vs = np.array(vs)
+    y_error = np.array(y_error)
+    y_error = 1 / np.sqrt(y_error)
 
     order = np.argsort(ks)
     ks = ks[order]
     vs = vs[order]
 
-    plt.scatter(ks, vs)
+    plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
     plt.show()
