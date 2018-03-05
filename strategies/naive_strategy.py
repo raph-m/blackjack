@@ -464,6 +464,7 @@ def read_counter_results(id=''):
     vs = vs[order]
 
     plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
+    plt.plot(ks, ks * 0)
     plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"]))
     plt.xlabel("counter")
     plt.ylabel("average reward")
