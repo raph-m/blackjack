@@ -12,13 +12,13 @@ prochaines étapes:
 call répartition des tâches:
 - chercher les règles de cas vicieux et voir si on en a pas loupé. + tester l'environnement et relire le code de l'environnement.
 - le split ? est ce que on peut splitter plusieurs fois dans la même partie ? normalement on a le droit de splitter plusieurs fois.
-- attention quand on split sur des As il y a une règle chelou.
+- attention quand on split sur des As il y a une règle chelou. #fait
 - environnement à tester encore un peu
-- finir la fonction pour évaluer les stratégies (calcul d'espérance).
+- finir la fonction pour évaluer les stratégies (calcul d'espérance). #fait
 - stratégies: stratégie naive. pour score > x je m'arrete. calculer l'espérance pour chaque x
 - faire une fonction qui te renvoie ton état. même deux fonctions. Une qui mange une suite de carte et qui te renvoie l'état donc soit sous forme d'ID soit sous forme
-lisible par des humains. Genre soft-11-3. ou sinon paires-5-10.
-- stratégies: stratégie de base à calculer en Monte-Carlo.
+lisible par des humains. Genre soft-11-3. ou sinon paires-5-10. #fait
+- stratégies: stratégie de base à calculer en Monte-Carlo. #fait pour 1 seul player versus dealer
 - stratégies: compteur. Implémenter le compteur. Le mieux c'est de l'incruster dans la classe Deck ou Dealer (enfin intégré à l'environnement quoi).
 Et peut etre que après on recodera ça pour que ça soit bien personnalisable. (ML sur la fonction de comptage)
 
