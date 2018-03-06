@@ -60,7 +60,7 @@ def episode(Q, F, epsilon):
         state = encoding(player_cards, [dealer_cards[0]])
         action = choose_action(state, Q, epsilon, random=True)
         observation.append((state, action))
-        for t in range(12):
+        for t in range(21):
             #print("step", action, hand)
             res = dealer.step(action)
             if res["done"]:

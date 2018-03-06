@@ -68,7 +68,7 @@ def episode(Q, epsilon, alpha, gamma):
         dealer_cards = res["dealer_cards"]
         player_cards = res["hands"][player_playing][hand_playing]
         state = encoding(player_cards, [dealer_cards[0]])
-        for t in range(12):
+        for t in range(21):
             action = choose_action(state, Q, epsilon)
             res = dealer.step(action)
             if res["done"]:
