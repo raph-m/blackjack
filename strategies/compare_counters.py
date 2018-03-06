@@ -1,6 +1,6 @@
 from strategies.naive_strategy import parallel_evaluate_counting_strategy
 import json
-from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp
+from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp, my_counter0, my_counter1
 
 
 def compare_high_low_counters():
@@ -65,16 +65,16 @@ def compare_counters(number_of_decks, shuffle_every):
     names = []
     bs = []
     if number_of_decks == 4 and shuffle_every == 52:
-        ws.append({1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1})
-        ws.append({1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0})
-        names.append("my 5 level counter with b = 6")
-        names.append("my 3 level counter with b = 6")
+        ws.append(my_counter0)
+        ws.append(my_counter1)
+        names.append("my_5_level_b=6")
+        names.append("my_3_level_b=6")
         bs.append(6)
         bs.append(6)
-        ws.append({1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1})
-        ws.append({1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0})
-        names.append("my 5 level counter with b = 7")
-        names.append("my 3 level counter with b = 7")
+        ws.append(my_counter0)
+        ws.append(my_counter1)
+        names.append("my_5_level_b=7")
+        names.append("my_3_level_b=7")
         bs.append(7)
         bs.append(7)
 
@@ -133,3 +133,39 @@ def compare_counters(number_of_decks, shuffle_every):
         print("with no bet ratio, total reward is: " + str(r0))
         print("with bet ratio, total reward is: " + str(r1))
         print()
+
+
+def plot_counter_results(id=''):
+    with open("temp_results/nb_events"+id+".json", "r") as fp:
+        nb_events = json.load(fp)
+    with open("temp_results/rewards"+id+".json", "r") as fp:
+        rewards = json.load(fp)
+    with open("temp_results/params"+id+".json", "r") as fp:
+        params = json.load(fp)
+
+    print(nb_events)
+    print(rewards)
+    ks = []
+    vs = []
+    y_error = []
+    for k, v in rewards.items():
+        if nb_events[k] > 1000:
+            ks.append(k)
+            vs.append(v)
+            y_error.append(nb_events[k])
+
+    ks = np.array(ks).astype(int)
+    vs = np.array(vs)
+    y_error = np.array(y_error)
+    y_error = 1 / np.sqrt(y_error)
+
+    order = np.argsort(ks)
+    ks = ks[order]
+    vs = vs[order]
+
+    plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
+    plt.plot(ks, ks * 0)
+    plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"]))
+    plt.xlabel("counter")
+    plt.ylabel("average reward")
+    plt.show()

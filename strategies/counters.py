@@ -4,6 +4,12 @@ hi_opt_2 = {}
 ko = {}
 omega_2 = {}
 
+# counter 5 level counter for 4 decks and 52 shuffle every
+my_counter0 = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1}
+
+# counter 3 level counter for 4 decks and 52 shuffle every
+my_counter1 = {1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0}
+
 
 for i in range(1, 14):
     if i >= 10 or i == 1:
