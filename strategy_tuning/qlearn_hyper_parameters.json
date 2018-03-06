@@ -1,0 +1,1 @@
+{"value function": -0.014971500000000002, "alpha": 0.0017945979845811527, "epsilon": 0.19764686483646882, "gamma": 0.9593011889398048, "algorithm": "qlearn", "number_of_decks":6, "shuffle_every":78}
