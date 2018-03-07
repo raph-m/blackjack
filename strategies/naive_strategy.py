@@ -121,13 +121,31 @@ def save_base_policy():
     policy = {}
     for i in range(1,11):
         for j in range(1,11):
+            player = [i]
+            dealer = [j]
+            state = encoding(player, dealer, can_split=True)
+            enc = state.split(".")
+            if int(enc[1])!=0:
+                policy[state] = basic_strategy(player, dealer, None, True)
+    for i in range(1,11):
+        for j in range(1,11):
             for k in range(1,11):
-                player = [i,j]
+                player = [i, j]
                 dealer = [k]
                 state = encoding(player, dealer, can_split=True)
                 enc = state.split(".")
                 if int(enc[1])!=0:
                     policy[state] = basic_strategy(player, dealer, None, True)
+    for i in range(1,11):
+        for j in range(1,11):
+            for k in range(1,11):
+                for l in range(1,11):
+                    player = [i, j, k]
+                    dealer = [l]
+                    state = encoding(player, dealer, can_split=True)
+                    enc = state.split(".")
+                    if int(enc[1])!=0:
+                        policy[state] = basic_strategy(player, dealer, None, True)
     with open("strategy_tuning/base_wiki_policy.json", "w") as fp:
         json.dump(policy, fp)
 
