@@ -20,6 +20,7 @@ with open("strategy_tuning/qlearn_hyper_parameters.json", "r") as fp:
 policy = QLearn(epochs=epochs, epsilon=hyp["epsilon"], alpha=hyp["alpha"], gamma=hyp["gamma"])
 policy["name"] = "my_basic"
 policy["epochs"] = epochs
+# we obtain for this policy an expectancy of -1.67%
 
 
 """

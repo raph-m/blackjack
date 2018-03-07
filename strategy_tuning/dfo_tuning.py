@@ -31,18 +31,19 @@ def tune(algo):
     if algo == "MC":
         res = gp_minimize(function_mc, [(0, 1)], n_calls=n_calls, x0=[0.5], verbose=True)
         epsilon = res.x[0]
-        with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
-            json.dump({"algorithm": algo,
-                "epsilon" : epsilon,
-                "value function" : -res.fun
-                },
+        with open("strategy_tuning/"+algo+"_hyper_parameters"+".json", "w") as fp:
+            json.dump({
+                "algorithm": algo,
+                "epsilon": epsilon,
+                "value function": -res.fun
+            },
                 fp)
         #  print ('best epsilon is:', res.x)
         #  print ('best expectancy is:', - res.fun)
     if algo == "qlearn":
         res = gp_minimize(function_qlearn, [(0, .2), (0, .2), (.8, 1)], n_calls=30, verbose=True)
         epsilon, alpha, gamma = res.x
-        with open("temp_results/"+algo+"_hyper_parameters"+".json", "w") as fp:
+        with open("strategy_tuning/"+algo+"_hyper_parameters"+".json", "w") as fp:
             json.dump({
                 "algorithm": algo,
                 "epsilon": epsilon,
