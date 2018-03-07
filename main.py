@@ -11,14 +11,17 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "w") as fp:
     json.dump(policy, fp)
 """
 
-"""
+
 # generate a policy with a Q learning algorithm
 from strategy_generator.base_qlearning import QLearn
-epochs = 1000000
-policy = QLearn(epochs=epochs, epsilon=0.1989, alpha=0.0362, gamma=0.9587)
+epochs = int(1e8)
+with open("strategy_tuning/qlearn_hyper_parameters.json", "r") as fp:
+    hyp = json.load(fp)
+policy = QLearn(epochs=epochs, epsilon=hyp["epsilon"], alpha=hyp["alpha"], gamma=hyp["gamma"])
 policy["name"] = "my_basic"
 policy["epochs"] = epochs
-"""
+# we obtain for this policy an expectancy of -1.67%
+
 
 """
 # Load a strategy designed with n epochs
@@ -41,17 +44,17 @@ policy_2["name"] = "wiki_base"
 policy_2["epochs"] = 0
 """
 
-"""
+
 # Evaluate the policy with parallel computing
 from strategies.naive_strategy import parallel_expectancy, expectancy
 import time
 start = time.time()
-n_tries = 10000 # 00
+n_tries = int(1e6)
 print(parallel_expectancy(policy, n_tries))
 end = time.time()
 print("parallel time: ")
 print(end-start)
-"""
+
 
 """
 # implement dfo to find the best hyper parameters for MC and Q-learning
@@ -82,12 +85,12 @@ for i in range(10):
     print("")
 """
 
-"""
+
 # Visualize the policy in 3 figures for pairs, soft hands and hard hands
 from util.tools import visualizePolicy
 visualizePolicy(policy)
-visualizePolicy(policy_2)
-"""
+#visualizePolicy(policy_2)
+
 
 """
 #create n play for count learning
@@ -101,7 +104,7 @@ end = time.time()
 print(end-start)
 """
 
-
+"""
 from train_counter.train_counter import train_w_ridge
 train_w_ridge("dataset_1000000_n_deck_2_shuffle_80.csv")
 train_w_ridge("dataset_1000000_n_deck_4_shuffle_52.csv")
@@ -120,3 +123,4 @@ train_w_ridge("dataset_1000000_n_deck_4_shuffle_52.csv")
 # thus we can choose -5 levels- w = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1}
 # or -3 levels- w = {1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0}
 # for this situation, we can choose a threshold of 6 or 7 (to be decided)
+"""
