@@ -52,23 +52,27 @@
 #     print("")
 
 
-from strategies.compare_counters import compare_counters
-import time
+# from strategies.compare_counters import compare_counters
+# import time
+#
+# n = int(1e2)
+# print("running comapare counters for n =" +str(n))
+# print("this should take a few seconds")
+# start = time.time()
+# compare_counters(n, 4, 52)
+# end = time.time()
+# print("done in: "+str((end-start) / (60 * 60)) + " hours")
+#
+# ratio = (end - start) / n
+# n = int(1e7)
+# print("running comapare counters for n =" +str(n))
+# start = time.time()
+# print("this should take " + str(n * ratio / (60 * 60)) + " hours")
+# compare_counters(n, 4, 52)
+# end = time.time()
+# print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
-n = int(1e2)
-print("running comapare counters for n =" +str(n))
-print("this should take a few seconds")
-start = time.time()
-compare_counters(n, 4, 52)
-end = time.time()
-print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
-ratio = (end - start) / n
-n = int(1e7)
-print("running comapare counters for n =" +str(n))
-start = time.time()
-print("this should take " + str(n * ratio / (60 * 60)) + " hours")
-compare_counters(n, 4, 52)
-end = time.time()
-print("done in: "+str((end-start) / (60 * 60)) + " hours")
-
+from strategies.naive_strategy import best_naive_strategy
+n = int(1e6)
+best_naive_strategy(n)

@@ -238,13 +238,22 @@ def parallel_expectancy(strategy, n):
 
 
 def best_naive_strategy(n):
-    results = np.zeros(22)
-    for k in range(22):
-        strat = {"name": "naive", "k": k}
-        results[k] = expectancy(strat, n)
-        print(str(k)+": "+str(results[k]*100))
-    plt.plot(range(22), results*100)
-    plt.show()
+    ks = range(8, 19)
+    results = np.zeros(len(ks))
+    for i in range(len(ks)):
+        strat = {"name": "naive", "k": ks[i]}
+        results[i] = parallel_expectancy(strat, n)
+        print(str(ks[i])+": "+str(results[i]*100))
+
+    y_error = 100 * np.ones(len(results)) / np.sqrt(n)
+    print(y_error)
+    plt.errorbar(ks, results * 100, yerr=[y_error, y_error], fmt='o')
+    plt.plot(ks, np.zeros(len(results)), label="zero")
+    plt.legend()
+    plt.title("hit on k, stick on k+1")
+    plt.xlabel("k")
+    plt.ylabel("average reward for a 100 dollars initial bet")
+    plt.savefig("dealer_like.png")
 
 
 def blackjack_counter(n=100, seed=300):
