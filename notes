@@ -30,7 +30,7 @@ Boite à idées:
 Stratégie naive:
 - la meilleure stratégie naive est de rester dès que le score est strictement plus grand que 14 et tirer sinon. On a alors une espérance à 2.85% à l'avantage du croupier
 
-J'ai hardcoder la stratégie de base. Le pb c'est que quand je la teste j'ai une espérance positive.
+J'ai hardcodé la stratégie de base. Le pb c'est que quand je la teste j'ai une espérance positive. On a une espérance de -0.8% avec celle de wiki et une espérance de -0.798 avec celle calculé par MC avec epsilon = 0.01
 Donc sûrement un problème avec l'environnment ou bien dans mon code qui s'occupe de calculer l'espérance. Je sais pas d'où ça vient ...
 
 Les règles qui pourraient fausser l'espérance:
