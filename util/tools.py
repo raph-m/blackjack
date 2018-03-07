@@ -106,7 +106,7 @@ def visualizePolicy(policy):
             pair[10-player, dealer-1] = actions_space[policy[state]]
         elif typ == "soft" and player < 21:
             soft[20-player, dealer-1] = actions_space[policy[state]]
-        elif typ == "hard" and player < 21:
+        elif typ == "hard" and player < 21 and player > 3:
             hard[20-player, dealer-1] = actions_space[policy[state]]
 
     rpAs = pair[-1,:].reshape(1,10)
@@ -130,7 +130,7 @@ def visualizePolicy(policy):
     dlabel = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "As"]
     plabel = ["As,As", "10,10","9,9", "8,8", "7,7", "6,6", "5,5", "4,4", "3,3",
         "2,2"]
-    slabel = ["20", "19", "18", "17", "16", "15", "14", "13"]
+    slabel = ["A,9", "A,8", "A,7", "A,6", "A,5", "A,4", "A,3", "A,2"]
     hlabel = ["20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10",
         "9", "8", "7", "6", "5", "4"]
     plt.matshow(pair)
