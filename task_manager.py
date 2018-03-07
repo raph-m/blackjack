@@ -64,7 +64,7 @@ end = time.time()
 print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
 ratio = (end - start) / n
-n = int(1e4)
+n = int(1e6)
 print("running comapare counters for n =" +str(n))
 start = time.time()
 print("this should take " + str(n * ratio / (60 * 60)) + " hours")
