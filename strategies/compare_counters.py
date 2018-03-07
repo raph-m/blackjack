@@ -1,6 +1,8 @@
 from strategies.naive_strategy import parallel_evaluate_counting_strategy
 import json
 from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp, my_counter0, my_counter1
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def compare_high_low_counters():
@@ -52,12 +54,10 @@ def compare_high_low_counters():
         print()
 
 
-def compare_counters(number_of_decks, shuffle_every):
-    n = int(1e6)
+def compare_counters(n, number_of_decks, shuffle_every):
     strategy = {"name": "basic"}
-    bet_ratio = 30
 
-    print("evaluating different counters for n = " + str(n) + " and bet ratio = " + str(bet_ratio))
+    print("evaluating different counters for n = " + str(n))
     print("number of decks: " + str(number_of_decks))
     print("shuffle every: " + str(shuffle_every))
 
@@ -67,14 +67,14 @@ def compare_counters(number_of_decks, shuffle_every):
     if number_of_decks == 4 and shuffle_every == 52:
         ws.append(my_counter0)
         ws.append(my_counter1)
-        names.append("my_5_level_b=6")
-        names.append("my_3_level_b=6")
+        names.append("my_3_level_counter_with_b=6")
+        names.append("my_5_level_counter_with_b=6")
         bs.append(6)
         bs.append(6)
         ws.append(my_counter0)
         ws.append(my_counter1)
-        names.append("my_5_level_b=7")
-        names.append("my_3_level_b=7")
+        names.append("my_3_level_counter_with_b=6")
+        names.append("my_5_level_counter_with_b=6")
         bs.append(7)
         bs.append(7)
 
@@ -82,57 +82,55 @@ def compare_counters(number_of_decks, shuffle_every):
         famous_counters_names = ["default_thorp", "hi_opt_1", "hi_opt_2", "ko", "omega_2"]
         ws += famous_counters
         names += famous_counters_names
+        bs += [0] * len(famous_counters_names)
 
-        for counter_dic in famous_counters:
+    for bet_ratio in [10, 30, 100, 1000]:
+        for i in range(len(names)):
+            if names[i] in famous_counters_names:
+                with open("temp_results/nb_events" + names[i] + ".json") as fp:
+                    nb_events = json.load(fp)
+                with open("temp_results/rewards" + names[i] + ".json") as fp:
+                    rewards = json.load(fp)
+                with open("temp_results/params" + names[i] + ".json") as fp:
+                    params = json.load(fp)
 
+                bet_mapping = {}
+                for j in range(-50, 50):
+                    try:
+                        bet_mapping[j] = 1 if rewards[j] >= 0 else 0
+                    except:
+                        bet_mapping[j] = 1 if j >= 0 else 0
+            else:
+                bet_mapping = {}
+                for j in range(-50, 50):
+                    bet_mapping[j] = 1 if j >= bs[i] else 0
 
+            r0 = parallel_evaluate_counting_strategy(
+                strategy,
+                n,
+                bet_mapping,
+                number_of_decks=number_of_decks,
+                shuffle_every=shuffle_every,
+                bet_ratio=1,
+                number_of_players=1,
+                counter=PersonalizedCounter(ws[i])
+            )
 
+            r1 = parallel_evaluate_counting_strategy(
+                strategy,
+                n,
+                bet_mapping,
+                number_of_decks=number_of_decks,
+                shuffle_every=shuffle_every,
+                bet_ratio=bet_ratio,
+                number_of_players=1,
+                counter=PersonalizedCounter(ws[i])
+            )
 
-    # coefs: [-0.43015842, -0.14951642, 0.75302885, 1.45367159, 1.69597542, 0.71873267, 0.0932644, -0.18514274, -0.77762071, -1.90319907, 0.05352541, -1.38579426, -0.76848075]
-    # intercept: -6.93728315673
-    # thus we can choose -5 levels- w = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1}
-    # or -3 levels- w = {1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0, 8: 0, 9: 0, 10: -1, 11: 0, 12: -1, 13: 0}
-    # for this situation, we can choose a threshold of 6 or 7 (to be decided)
-
-    for decks in [2, 3, 4, 6]:
-        with open("temp_results/nb_events" + str(decks) + "decks.json") as fp:
-            nb_events = json.load(fp)
-        with open("temp_results/rewards" + str(decks) + "decks.json") as fp:
-            rewards = json.load(fp)
-        with open("temp_results/params" + str(decks) + "decks.json") as fp:
-            params = json.load(fp)
-
-        bet_mapping = {}
-        for i in range(-50, 50):
-            try:
-                bet_mapping[i] = 1 if rewards[i] >= 0 else 0
-            except:
-                bet_mapping[i] = 1 if i >= 0 else 0
-
-        r0 = parallel_evaluate_counting_strategy(
-            strategy,
-            n,
-            bet_mapping,
-            number_of_decks=params["number_of_decks"],
-            shuffle_every=params["shuffle_every"],
-            bet_ratio=1,
-            number_of_players=1
-        )
-
-        r1 = parallel_evaluate_counting_strategy(
-            strategy,
-            n,
-            bet_mapping,
-            number_of_decks=params["number_of_decks"],
-            shuffle_every=params["shuffle_every"],
-            bet_ratio=30,
-            number_of_players=1
-        )
-
-
-        print("with no bet ratio, total reward is: " + str(r0))
-        print("with bet ratio, total reward is: " + str(r1))
-        print()
+            print("computing for counter: "+names[i])
+            print("with no bet ratio, total reward is: " + str(r0))
+            print("with bet ratio = " + str(bet_ratio) + ", total reward is: " + str(r1))
+            print()
 
 
 def plot_counter_results(id=''):
@@ -165,7 +163,7 @@ def plot_counter_results(id=''):
 
     plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
     plt.plot(ks, ks * 0)
-    plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"]))
+    plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"])+", counter = "+id)
     plt.xlabel("counter")
     plt.ylabel("average reward")
     plt.show()
