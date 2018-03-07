@@ -1,6 +1,6 @@
 # import time
-# from strategies.naive_strategy import plot_counter_parallel
-# from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp, my_counter0, my_counter1
+from strategies.naive_strategy import plot_counter_parallel
+from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp, my_counter0, my_counter1
 #
 # famous_counters = [default_thorp, hi_opt_1, hi_opt_2, ko, omega_2]
 # famous_counters.append(my_counter0)
@@ -52,27 +52,61 @@
 #     print("")
 
 
-# from strategies.compare_counters import compare_counters
-# import time
-#
-# n = int(1e2)
-# print("running comapare counters for n =" +str(n))
-# print("this should take a few seconds")
-# start = time.time()
-# compare_counters(n, 4, 52)
-# end = time.time()
-# print("done in: "+str((end-start) / (60 * 60)) + " hours")
-#
-# ratio = (end - start) / n
-# n = int(1e7)
-# print("running comapare counters for n =" +str(n))
-# start = time.time()
-# print("this should take " + str(n * ratio / (60 * 60)) + " hours")
-# compare_counters(n, 4, 52)
-# end = time.time()
-# print("done in: "+str((end-start) / (60 * 60)) + " hours")
+from strategies.compare_counters import compare_counters
+import time
+
+n = int(1e2)
+print("running compare counters for n =" +str(n))
+print("this should take a few seconds")
+start = time.time()
+compare_counters(n, 4, 52)
+end = time.time()
+print("done in: "+str((end-start) / (60 * 60)) + " hours")
+
+ratio = (end - start) / n
+n = int(1e7)
+print("running compare counters for n =" +str(n))
+start = time.time()
+print("this should take " + str(n * ratio / (60 * 60)) + " hours")
+compare_counters(n, 4, 52)
+end = time.time()
+print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
 
-from strategies.naive_strategy import best_naive_strategy
-n = int(1e6)
-best_naive_strategy(n)
+# from strategies.naive_strategy import best_naive_strategy
+# n = int(1e6)
+# best_naive_strategy(n)
+#
+# from strategies.naive_strategy import plot_counter_parallel
+# from strategies.counters import ThorpCounter
+# n = int(1e5)
+# id_ = "4decks_104shuffleevery"
+# number_of_decks = 4
+# shuffle_every = 104
+# plot_counter_parallel(n, show=False, id=id_, number_of_decks=number_of_decks, shuffle_every=shuffle_every, counter=ThorpCounter())
+
+#
+# id_ = "my_5_level_counter_with_b=6"
+# from strategies.naive_strategy import read_counter_results
+# read_counter_results(id=id_, baseline=-0.0087)
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

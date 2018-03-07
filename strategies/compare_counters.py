@@ -73,8 +73,8 @@ def compare_counters(n, number_of_decks, shuffle_every):
         bs.append(6)
         ws.append(my_counter0)
         ws.append(my_counter1)
-        names.append("my_3_level_counter_with_b=6")
-        names.append("my_5_level_counter_with_b=6")
+        names.append("my_3_level_counter_with_b=7")
+        names.append("my_5_level_counter_with_b=7")
         bs.append(7)
         bs.append(7)
 
@@ -97,24 +97,13 @@ def compare_counters(n, number_of_decks, shuffle_every):
                 bet_mapping = {}
                 for j in range(-50, 50):
                     try:
-                        bet_mapping[j] = 1 if rewards[j] >= 0 else 0
+                        bet_mapping[j] = 1 if rewards[str(j)] >= 0 else 0
                     except:
                         bet_mapping[j] = 1 if j >= 0 else 0
             else:
                 bet_mapping = {}
                 for j in range(-50, 50):
                     bet_mapping[j] = 1 if j >= bs[i] else 0
-
-            r0 = parallel_evaluate_counting_strategy(
-                strategy,
-                n,
-                bet_mapping,
-                number_of_decks=number_of_decks,
-                shuffle_every=shuffle_every,
-                bet_ratio=1,
-                number_of_players=1,
-                counter=PersonalizedCounter(ws[i])
-            )
 
             r1 = parallel_evaluate_counting_strategy(
                 strategy,
@@ -128,7 +117,6 @@ def compare_counters(n, number_of_decks, shuffle_every):
             )
 
             print("computing for counter: "+names[i])
-            print("with no bet ratio, total reward is: " + str(r0))
             print("with bet ratio = " + str(bet_ratio) + ", total reward is: " + str(r1))
             print()
 

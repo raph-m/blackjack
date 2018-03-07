@@ -1,0 +1,222 @@
+running comapare counters for n =10 000 000
+this should take 274.13384781943427 hours
+evaluating different counters for n = 10000000
+number of decks: 4
+shuffle every: 52
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -47322.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -67208.0
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -49932.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -71100.5
+
+N processes: 16
+N processes: 16
+computing for counter: default_thorp
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -264240.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_1
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -288396.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -265752.5
+
+N processes: 16
+N processes: 16
+computing for counter: ko
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -385556.0
+
+N processes: 16
+N processes: 16
+computing for counter: omega_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 10, total reward is: -258039.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: 23297.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -40778.0
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: 14887.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -53320.5
+
+N processes: 16
+N processes: 16
+computing for counter: default_thorp
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -675660.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_1
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -753496.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -680532.5
+
+N processes: 16
+N processes: 16
+computing for counter: ko
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -1066566.0
+
+N processes: 16
+N processes: 16
+computing for counter: omega_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 30, total reward is: -655679.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: 270467.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: 51727.0
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: 241757.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: 8909.5
+
+N processes: 16
+N processes: 16
+computing for counter: default_thorp
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: -2115630.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_1
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: -2381346.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: -2132262.5
+
+N processes: 16
+N processes: 16
+computing for counter: ko
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: -3450101.0
+
+N processes: 16
+N processes: 16
+computing for counter: omega_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 100, total reward is: -2047419.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: 3448367.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: 1241077.0
+
+N processes: 16
+N processes: 16
+computing for counter: my_3_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: 3158657.5
+
+N processes: 16
+N processes: 16
+computing for counter: my_5_level_counter_with_b=6
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: 809009.5
+
+N processes: 16
+N processes: 16
+computing for counter: default_thorp
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: -20629530.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_1
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: -23310846.5
+
+N processes: 16
+N processes: 16
+computing for counter: hi_opt_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: -20797362.5
+
+N processes: 16
+N processes: 16
+computing for counter: ko
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: -34095551.0
+
+N processes: 16
+N processes: 16
+computing for counter: omega_2
+with no bet ratio, total reward is: -79101.5
+with bet ratio = 1000, total reward is: -19941219.5
+
+done in: 2.142814189394315 hours

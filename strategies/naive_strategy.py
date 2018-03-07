@@ -215,20 +215,20 @@ def simple_play_2(dealer, strategy):
     return np.mean(rewards), np.mean(player_blackjacks), dealer_blackjack, dealer_burst
 
 
-def expectancy(strategy=None, n=100, seed=300):
+def expectancy(strategy=None, n=100, seed=300, number_of_decks=2, shuffle_every=52):
     """
     :param strategy: (dict) la stratégie à tester
     :param n: (int) nombre d'essais
     :return: (float) l'espérance de cette stratégie
     """
-    dealer = Dealer(seed=seed)
+    dealer = Dealer(seed=seed, number_of_decks=number_of_decks, shuffle_every=shuffle_every)
     total = 0.0
     for i in range(n):
         total += simple_play(dealer, strategy)
     return total / n
 
 
-def parallel_expectancy(strategy, n):
+def parallel_expectancy(strategy, n, number_of_decks=2, shuffle_every=52):
     """
     :param strategy: (dict) la stratégie à tester
     :param n: (int) nombre d'essais
@@ -244,7 +244,9 @@ def parallel_expectancy(strategy, n):
         kwds = {
             "strategy": strategy,
             "seed": seeds[i],
-            "n": int(n/n_tasks)
+            "n": int(n/n_tasks),
+            "number_of_decks": number_of_decks,
+            "shuffle_every": shuffle_every
         }
         tasks.append(pool.apply_async(expectancy, kwds=kwds))
     pool.close()
@@ -466,7 +468,7 @@ def parallel_evaluate_counting_strategy(
     return np.sum(results)
 
 
-def read_counter_results(id=''):
+def read_counter_results(id='', get_baseline=False, baseline=None):
     with open("temp_results/nb_events"+id+".json", "r") as fp:
         nb_events = json.load(fp)
     with open("temp_results/rewards"+id+".json", "r") as fp:
@@ -495,8 +497,24 @@ def read_counter_results(id=''):
     vs = vs[order]
 
     plt.errorbar(ks, vs, yerr=[y_error, y_error], fmt='o')
-    plt.plot(ks, ks * 0)
-    plt.title("number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"]))
+    plt.plot(ks, ks * 0, label="zero")
+    title_str = "number of decks: "+str(params["number_of_decks"])+", shuffle every: "+str(params["shuffle_every"])
+    plt.title(title_str)
     plt.xlabel("counter")
     plt.ylabel("average reward")
+
+    if get_baseline:
+        n = int(1e6)
+        baseline = parallel_expectancy(
+            {"name": "basic"},
+            n,
+            number_of_decks=params["number_of_decks"],
+            shuffle_every=params["shuffle_every"]
+        )
+        plt.plot(ks, np.ones(len(ks)) * baseline, label="avg reward = "+str(baseline))
+
+    if baseline:
+        plt.plot(ks, np.ones(len(ks)) * baseline, label="avg reward = "+str(baseline))
+
+    plt.legend()
     plt.show()
