@@ -256,7 +256,8 @@ def best_naive_strategy(n):
     plt.title("hit on k, stick on k+1")
     plt.xlabel("k")
     plt.ylabel("average reward for a 100 dollars initial bet")
-    plt.show()
+    plt.savefig("results/best_naive.png")
+    plt.close()
 
 
 def blackjack_counter(n=100, seed=300):
@@ -331,7 +332,8 @@ def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104, counter=
 
 
 def plot_counter_parallel(
-        n, show=True,
+        n,
+        show=True,
         n_processes=None,
         id='',
         number_of_decks=3,
@@ -385,7 +387,9 @@ def plot_counter_parallel(
         plt.show()
 
     else:
+        print("number of events:")
         print(nb_events)
+        print("average rewards: :")
         print(rewards)
         with open("temp_results/nb_events"+id+".json", "w") as fp:
             json.dump(nb_events, fp)
@@ -395,6 +399,7 @@ def plot_counter_parallel(
             json.dump({"number_of_decks": number_of_decks, "shuffle_every": shuffle_every}, fp)
 
         print("saved results in temp_results")
+
 
 def evaluate_counting_strategy(
         n=1000,
@@ -433,7 +438,6 @@ def parallel_evaluate_counting_strategy(
         counter=ThorpCounter()
 ):
     pool = Pool()
-    print("N processes: "+str(pool._processes))
     tasks = []
     n_tasks = 50
     results = np.zeros(n_tasks)
@@ -467,8 +471,6 @@ def read_counter_results(id='', get_baseline=False, baseline=None):
     with open("temp_results/params"+id+".json", "r") as fp:
         params = json.load(fp)
 
-    print(nb_events)
-    print(rewards)
     ks = []
     vs = []
     y_error = []
@@ -510,3 +512,4 @@ def read_counter_results(id='', get_baseline=False, baseline=None):
     plt.legend()
     print("saving graph in results")
     plt.savefig("results/" + id + ".png")
+    plt.close()

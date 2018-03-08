@@ -1,5 +1,9 @@
 # blackjack
 Count cards in blackjack to bring down the house
+ALL the code on this project was created by us.
+
+## Retrieve our results
+Our project report is available in the results folder. You will be able to compute all of the results presented in the report simply by running the 'task_manager.py' file. However, this can take a very long time, so you might want to skip some parts of this file.
 
 ## Environment
 If the environment folder you can find the classes 'Dealer' and 'Deck'. You can find an example on how tu use them in the 'play_blackjack.py' file.
@@ -17,5 +21,6 @@ In the 'strategies.counters.py' file, you can find the implementation of several
 In the 'cloud_setup.py' file you can find the command line instructions to be able to run our entire project for Ubuntu 16.04 LTS. This can be useful if you want to setup a distant server to multiprocess the computations.
 
 ## Strategy Generator
+
 
 ## Strategy Tuning

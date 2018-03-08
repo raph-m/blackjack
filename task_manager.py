@@ -6,7 +6,8 @@ from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2
     my_counter0, my_counter1
 
 
-n = int(1e5)
+n = int(1e3)  #  1e5 TODO: you can reduce the values of n by a factor 10 if you want to obtain the results faster
+# TODO: but they will be less precise...
 print("computing best naive strategy:")
 best_naive_strategy(n)
 
@@ -14,22 +15,23 @@ best_naive_strategy(n)
 # TUNE strategy
 
 
+n = int(1e3)  # 1e5
 number_of_decks = [2, 2, 3, 4, 4, 6]
 shuffle_every = [52, 80, 104, 52, 104, 80]
 ids = ["thorp"+str(number_of_decks[i])+"decks"+str(shuffle_every[i])+"shuffleevery" for i in range(len(number_of_decks))]
 
 for i in range(len(number_of_decks)):
     start = time.time()
-    print("Running plot counter with n = "+str(n)+ids[i])
+    print("Running plot counter with n = "+str(n) + ", for " + ids[i])
     plot_counter_parallel(
         n,
         show=False,
-        id=ids,
-        number_of_decks=number_of_decks,
-        shuffle_every=shuffle_every
+        id=ids[i],
+        number_of_decks=number_of_decks[i],
+        shuffle_every=shuffle_every[i]
     )
     end = time.time()
-    print("done in: "+str((end-start) / (60 * 60)) + " hours")
+    print("done in: "+str((end-start) / (60 * 60)) + " hours\n")
 
 
 # plot results
@@ -47,7 +49,7 @@ famous_counters_names.append("my_3_level_counter_with_b=6")
 number_of_decks = 4
 shuffle_every = 52
 
-n = int(1e5)
+n = int(1e4)  # 1e5
 for i in range(len(famous_counters)):
 
     # Counter parallel
@@ -82,7 +84,7 @@ end = time.time()
 print("done in: "+str((end-start) / (60 * 60)) + " hours")
 
 ratio = (end - start) / n
-n = int(1e5)  # 1e7
+n = int(1e4)  # 1e7
 print("running compare counters for n =" + str(n))
 start = time.time()
 print("this should take " + str(n * ratio / (60 * 60)) + " hours")
