@@ -93,7 +93,7 @@ def check_encoding():
     assert encoding([7, 7], [1]) == "pair.7.1"
 
 
-def visualizePolicy(policy):
+def visualizePolicy(policy, id):
     pair, soft, hard = np.zeros((10, 10)), np.zeros((8, 10)), np.zeros((17, 10))
     actions_space = {"hit": 1, "stick": 2, "double": 3, "split": 4}
     pol = dict(policy)
@@ -139,6 +139,8 @@ def visualizePolicy(policy):
     plt.title("base strategy with pairs \n violet : hit, blue : stick, green :" + "double, yellow : split")
     plt.xticks(x, dlabel)
     plt.yticks(x, plabel)
+    plt.savefig("results/base_pair_"+str(id)".png")
+    plt.close()
 
     plt.matshow(soft)
     plt.xlabel("dealer card")
@@ -146,6 +148,8 @@ def visualizePolicy(policy):
     plt.title("base strategy with soft hands \n violet : hit, blue : stick, " + "yellow : double")
     plt.xticks(x, dlabel)
     plt.yticks(ys, slabel)
+    plt.savefig("results/base_soft_"+str(id)".png")
+    plt.close()
 
     plt.matshow(hard)
     plt.xlabel("dealer card")
@@ -153,8 +157,8 @@ def visualizePolicy(policy):
     plt.title("base strategy with hard hands \n violet : hit, blue : stick, " + "yellow : double")
     plt.xticks(x, dlabel)
     plt.yticks(yh, hlabel)
-    plt.show()
-
+    plt.savefig("results/base_hard_"+str(id)".png")
+    plt.close()
 
 def change_datatype(df, int_cols=None):
     if not int_cols:

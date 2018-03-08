@@ -17,7 +17,7 @@ save_base_policy() #to be run once
 #load the generated policy
 with open("strategy_generator/base_wiki_policy.json", "r") as fp:
     wiki_pol = json.load(fp)
-visualizePolicy(wiki_pol)
+visualizePolicy(wiki_pol, "reference")
 wiki_pol["name"] = "my_basic"
 wiki_pol["epochs"] = 1
 
@@ -40,7 +40,7 @@ from strategy_generator.base_monte_carlo import MC
 with open("strategy_tuning/mc_hyper_parameters.json", "r") as fp:
     hyp_mc = json.load(fp)
 mc_pol = MC(epochs=epochs, epsilon=hyp_mc["epsilon"])
-visualizePolicy(mc_pol)
+visualizePolicy(mc_pol, "mc")
 mc_pol["name"] = "my_basic"
 mc_pol["epochs"] = 1
 print("expectancy for Monte Carlo basic strategy:", parallel_expectancy(mc_pol, n_tries))
@@ -49,7 +49,7 @@ from strategy_generator.base_qlearning import QLearn
 with open("strategy_tuning/qlearn_hyper_parameters.json", "r") as fp:
     hyp_cl = json.load(fp)
 ql_pol = QLearn(epochs=epochs, epsilon=hyp_ql["epsilon"], alpha=hyp_ql["alpha"], gamma=hyp_ql["gamma"])
-visualizePolicy(ql_pol)
+visualizePolicy(ql_pol, "ql")
 ql_pol["name"] = "my_basic"
 ql_pol["epochs"] = 1
 print("expectancy for Q-learning basic strategy:", parallel_expectancy(ql_pol, n_tries))

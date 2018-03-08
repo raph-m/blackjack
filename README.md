@@ -2,7 +2,7 @@
 Count cards in blackjack to bring down the house
 
 ## Environment
-If the environment folder you can find the classes 'Dealer' and 'Deck'. You can find an example on how tu use them in the 'play_blackjack.py' file.
+In the environment folder you can find the classes 'Dealer' and 'Deck'. You can find an example on how tu use them in the 'play_blackjack.py' file.
 
 ## Tools
 In the 'util/tools.py' file, you will find some useful tools for blackjack. For example, you can get the score of a hand or it's type (soft, hard, pair)
@@ -17,5 +17,8 @@ In the 'strategies.counters.py' file, you can find the implementation of several
 In the 'cloud_setup.py' file you can find the command line instructions to be able to run our entire project for Ubuntu 16.04 LTS. This can be useful if you want to setup a distant server to multiprocess the computations.
 
 ## Strategy Generator
+In the 'strategy_generator/base_qlearning.py' you can find the implementation of the Q-learning algorithm. To run it, call the QLearn() function.
+In the 'strategy_generator/base_monte_carlo.py' you can find the implementation of the Monte Carlo reinforcement algorithm. To run it, call the MC() function.
 
 ## Strategy Tuning
+In the 'strategy_tunning/dfo_tuning.py' file you can find the implementation of hyperparameters tuning usig DFO-TR algorithm. To run it, call tune("MC") or tune("qlearn")
