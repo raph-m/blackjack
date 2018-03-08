@@ -97,8 +97,10 @@ def visualizePolicy(policy):
     pair, soft, hard = np.zeros((10,10)), np.zeros((8,10)), np.zeros((17,10))
     actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
     pol = dict(policy)
-    del pol["epochs"]
-    del pol["name"]
+    if "epochs" in pol :
+        del pol["epochs"]
+    if "name" in pol :
+        del pol["name"]
     for state in pol :
         encoded = state.split(".")
         typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
