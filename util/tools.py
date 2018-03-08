@@ -106,7 +106,7 @@ def visualizePolicy(policy, id):
         typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
         if typ == "pair":
             pair[10-player, dealer-1] = actions_space[policy[state]]
-        elif typ == "soft" and player < 21:
+        elif typ == "soft" and 11 < player < 21:
             soft[20-player, dealer-1] = actions_space[policy[state]]
         elif typ == "hard" and 3 < player < 21:
             hard[20-player, dealer-1] = actions_space[policy[state]]
