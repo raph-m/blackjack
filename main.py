@@ -15,7 +15,7 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "w") as fp:
 # generate a policy with a Q learning algorithm
 from strategy_generator.base_qlearning import QLearn
 epochs = int(1e8)
-with open("strategy_tuning/qlearn_hyper_parameters.json", "r") as fp:
+with open("strategy_generator/qlearn_hyper_parameters.json", "r") as fp:
     hyp = json.load(fp)
 policy = QLearn(epochs=epochs, epsilon=hyp["epsilon"], alpha=hyp["alpha"], gamma=hyp["gamma"])
 policy["name"] = "my_basic"
@@ -38,7 +38,7 @@ policy["name"] = "my_basic"
 #save wiki base strategy the load it
 from strategies.naive_strategy import save_base_policy
 #save_base_policy()
-with open("strategy_tuning/base_wiki_policy.json", "r") as fp:
+with open("strategy_generator/base_wiki_policy.json", "r") as fp:
     policy_2 = json.load(fp)
 policy_2["name"] = "my_basic"
 policy_2["epochs"] = 1
