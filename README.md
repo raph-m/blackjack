@@ -1,5 +1,9 @@
 # blackjack
 Count cards in blackjack to bring down the house
+ALL the code on this project was created by us.
+
+## Retrieve our results
+Our project report is available in the results folder. You will be able to compute all of the results presented in the report simply by running the 'task_manager.py' file. However, this can take a very long time, so you might want to skip some parts of this file.
 
 ## Environment
 In the environment folder you can find the classes 'Dealer' and 'Deck'. You can find an example on how tu use them in the 'play_blackjack.py' file.

@@ -143,8 +143,6 @@ def plot_counter_results(id=''):
     with open("temp_results/params"+id+".json", "r") as fp:
         params = json.load(fp)
 
-    print(nb_events)
-    print(rewards)
     ks = []
     vs = []
     y_error = []
