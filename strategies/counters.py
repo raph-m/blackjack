@@ -4,6 +4,8 @@ hi_opt_2 = {}
 ko = {}
 omega_2 = {}
 
+
+# those are the counters that we found after training:
 # counter 5 level counter for 4 decks and 52 shuffle every
 my_counter0 = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 1, 7: 0, 8: 0, 9: -1, 10: -2, 11: 0, 12: -1, 13: -1}
 

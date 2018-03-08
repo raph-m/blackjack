@@ -94,8 +94,8 @@ def check_encoding():
 
 
 def visualizePolicy(policy):
-    pair, soft, hard = np.zeros((10,10)), np.zeros((8,10)), np.zeros((17,10))
-    actions_space={"hit" : 1, "stick" : 2, "double" : 3, "split" : 4}
+    pair, soft, hard = np.zeros((10, 10)), np.zeros((8, 10)), np.zeros((17, 10))
+    actions_space = {"hit": 1, "stick": 2, "double": 3, "split": 4}
     pol = dict(policy)
     if "epochs" in pol :
         del pol["epochs"]
@@ -104,25 +104,25 @@ def visualizePolicy(policy):
     for state in pol :
         encoded = state.split(".")
         typ, player, dealer = encoded[0], int(encoded[1]), int(encoded[2])
-        if typ == "pair" :
+        if typ == "pair":
             pair[10-player, dealer-1] = actions_space[policy[state]]
         elif typ == "soft" and player < 21:
             soft[20-player, dealer-1] = actions_space[policy[state]]
-        elif typ == "hard" and player < 21 and player > 3:
+        elif typ == "hard" and 3 < player < 21:
             hard[20-player, dealer-1] = actions_space[policy[state]]
 
-    rpAs = pair[-1,:].reshape(1,10)
+    rpAs = pair[-1, :].reshape(1, 10)
     pair = np.r_[rpAs, pair]
     pair = np.delete(pair, -1, axis=0)
-    cpAs = pair[:,0].reshape(10,1)
+    cpAs = pair[:, 0].reshape(10, 1)
     pair = np.append(pair, cpAs, axis=1)
     pair = np.delete(pair, 0, axis=1)
 
-    csAs = soft[:,0].reshape(8,1)
+    csAs = soft[:, 0].reshape(8, 1)
     soft = np.append(soft, csAs, axis=1)
     soft = np.delete(soft, 0, axis=1)
 
-    chAs = hard[:,0].reshape(17,1)
+    chAs = hard[:, 0].reshape(17, 1)
     hard = np.append(hard, chAs, axis=1)
     hard = np.delete(hard, 0, axis=1)
 
@@ -130,32 +130,27 @@ def visualizePolicy(policy):
     ys = np.arange(8)
     yh = np.arange(17)
     dlabel = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "As"]
-    plabel = ["As,As", "10,10","9,9", "8,8", "7,7", "6,6", "5,5", "4,4", "3,3",
-        "2,2"]
+    plabel = ["As,As", "10,10","9,9", "8,8", "7,7", "6,6", "5,5", "4,4", "3,3", "2,2"]
     slabel = ["A,9", "A,8", "A,7", "A,6", "A,5", "A,4", "A,3", "A,2"]
-    hlabel = ["20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10",
-        "9", "8", "7", "6", "5", "4"]
+    hlabel = ["20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4"]
     plt.matshow(pair)
     plt.xlabel("dealer card")
     plt.ylabel("player hand")
-    plt.title("base strategy with pairs \n violet : hit, blue : stick, green :"
-        + "double, yellow : split")
+    plt.title("base strategy with pairs \n violet : hit, blue : stick, green :" + "double, yellow : split")
     plt.xticks(x, dlabel)
     plt.yticks(x, plabel)
 
     plt.matshow(soft)
     plt.xlabel("dealer card")
     plt.ylabel("player hand")
-    plt.title("base strategy with soft hands \n violet : hit, blue : stick, "
-        + "yellow : double")
+    plt.title("base strategy with soft hands \n violet : hit, blue : stick, " + "yellow : double")
     plt.xticks(x, dlabel)
     plt.yticks(ys, slabel)
 
     plt.matshow(hard)
     plt.xlabel("dealer card")
     plt.ylabel("player hand")
-    plt.title("base strategy with hard hands \n violet : hit, blue : stick, "
-        + "yellow : double")
+    plt.title("base strategy with hard hands \n violet : hit, blue : stick, " + "yellow : double")
     plt.xticks(x, dlabel)
     plt.yticks(yh, hlabel)
     plt.show()
@@ -165,11 +160,11 @@ def change_datatype(df, int_cols=None):
     if not int_cols:
         int_cols = list(df.select_dtypes(include=['int']).columns)
     for col in int_cols:
-        if ((np.max(df[col]) <= 127) and(np.min(df[col] >= -128))):
+        if np.max(df[col]) <= 127 and np.min(df[col]) >= -128:
             df[col] = df[col].astype(np.int8)
-        elif ((np.max(df[col]) <= 32767) and(np.min(df[col] >= -32768))):
+        elif np.max(df[col]) <= 32767 and np.min(df[col]) >= -32768:
             df[col] = df[col].astype(np.int16)
-        elif ((np.max(df[col]) <= 2147483647) and(np.min(df[col] >= -2147483648))):
+        elif np.max(df[col]) <= 2147483647 and np.min(df[col]) >= -2147483648:
             df[col] = df[col].astype(np.int32)
         else:
             df[col] = df[col].astype(np.int64)

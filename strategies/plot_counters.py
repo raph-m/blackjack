@@ -1,5 +1,5 @@
 import time
-from strategies.naive_strategy import plot_counter_parallel
+from strategies.strategies import plot_counter_parallel
 
 
 # Counter parallel

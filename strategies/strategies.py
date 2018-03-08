@@ -1,11 +1,12 @@
-from environment.dealer import Dealer
-from util.tools import get_score
 import numpy as np
 import matplotlib.pyplot as plt
-from strategies.counters import ThorpCounter
-from util.tools import encoding
-import json
 from multiprocessing import Pool
+import json
+
+from environment.dealer import Dealer
+from util.tools import get_score, encoding
+from strategies.counters import ThorpCounter
+
 
 stick = "stick"
 split = "split"
@@ -119,32 +120,32 @@ def basic_strategy(hand, dealer_hand, strategy, can_split=True):
 
 def save_base_policy():
     policy = {}
-    for i in range(1,11):
-        for j in range(1,11):
+    for i in range(1, 11):
+        for j in range(1, 11):
             player = [i]
             dealer = [j]
             state = encoding(player, dealer, can_split=True)
             enc = state.split(".")
-            if int(enc[1])!=0:
+            if int(enc[1]) != 0:
                 policy[state] = basic_strategy(player, dealer, None, True)
-    for i in range(1,11):
-        for j in range(1,11):
-            for k in range(1,11):
+    for i in range(1, 11):
+        for j in range(1, 11):
+            for k in range(1, 11):
                 player = [i, j]
                 dealer = [k]
                 state = encoding(player, dealer, can_split=True)
                 enc = state.split(".")
-                if int(enc[1])!=0:
+                if int(enc[1]) != 0:
                     policy[state] = basic_strategy(player, dealer, None, True)
-    for i in range(1,11):
-        for j in range(1,11):
-            for k in range(1,11):
-                for l in range(1,11):
+    for i in range(1, 11):
+        for j in range(1, 11):
+            for k in range(1, 11):
+                for l in range(1, 11):
                     player = [i, j, k]
                     dealer = [l]
                     state = encoding(player, dealer, can_split=True)
                     enc = state.split(".")
-                    if int(enc[1])!=0:
+                    if int(enc[1]) != 0:
                         policy[state] = basic_strategy(player, dealer, None, True)
     with open("strategy_generator/base_wiki_policy.json", "w") as fp:
         json.dump(policy, fp)
@@ -168,9 +169,6 @@ def choose_action(hand, dealer_hand, strategy, can_split=True):
 
 
 def simple_play(dealer, strategy, mean=True):
-    """
-    une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
-    """
     res = dealer.reset()
     while not res["done"]:
 
@@ -190,9 +188,6 @@ def simple_play(dealer, strategy, mean=True):
 
 
 def simple_play_2(dealer, strategy):
-    """
-    une fonction pour récupérer le résultat sur une partie de blackjack suivant une stratégie
-    """
     res = dealer.reset()
     while not res["done"]:
 
@@ -216,11 +211,6 @@ def simple_play_2(dealer, strategy):
 
 
 def expectancy(strategy=None, n=100, seed=300, number_of_decks=2, shuffle_every=52):
-    """
-    :param strategy: (dict) la stratégie à tester
-    :param n: (int) nombre d'essais
-    :return: (float) l'espérance de cette stratégie
-    """
     dealer = Dealer(seed=seed, number_of_decks=number_of_decks, shuffle_every=shuffle_every)
     total = 0.0
     for i in range(n):
@@ -229,13 +219,7 @@ def expectancy(strategy=None, n=100, seed=300, number_of_decks=2, shuffle_every=
 
 
 def parallel_expectancy(strategy, n, number_of_decks=2, shuffle_every=52):
-    """
-    :param strategy: (dict) la stratégie à tester
-    :param n: (int) nombre d'essais
-    :return: (float) l'espérance de cette stratégie
-    """
     pool = Pool()
-    print("N processes: "+str(pool._processes))
     tasks = []
     n_tasks = 50
     results = np.zeros(n_tasks)
@@ -266,14 +250,13 @@ def best_naive_strategy(n):
         print(str(ks[i])+": "+str(results[i]*100))
 
     y_error = 100 * np.ones(len(results)) / np.sqrt(n)
-    print(y_error)
     plt.errorbar(ks, results * 100, yerr=[y_error, y_error], fmt='o')
     plt.plot(ks, np.zeros(len(results)), label="zero")
     plt.legend()
     plt.title("hit on k, stick on k+1")
     plt.xlabel("k")
     plt.ylabel("average reward for a 100 dollars initial bet")
-    plt.savefig("dealer_like.png")
+    plt.show()
 
 
 def blackjack_counter(n=100, seed=300):
@@ -347,12 +330,19 @@ def plot_counter(n=100, seed=300, number_of_decks=3, shuffle_every=104, counter=
     return nb_events, rewards
 
 
-def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks=3, shuffle_every=104, counter=ThorpCounter()):
+def plot_counter_parallel(
+        n, show=True,
+        n_processes=None,
+        id='',
+        number_of_decks=3,
+        shuffle_every=104,
+        counter=ThorpCounter()
+):
     if n_processes:
         pool = Pool(n_processes)
     else:
         pool = Pool()
-    print("N processes: "+str(pool._processes))
+
     tasks = []
     n_tasks = 50
 
@@ -404,6 +394,7 @@ def plot_counter_parallel(n, show=True, n_processes=None, id='', number_of_decks
         with open("temp_results/params"+id+".json", "w") as fp:
             json.dump({"number_of_decks": number_of_decks, "shuffle_every": shuffle_every}, fp)
 
+        print("saved results in temp_results")
 
 def evaluate_counting_strategy(
         n=1000,
@@ -482,7 +473,7 @@ def read_counter_results(id='', get_baseline=False, baseline=None):
     vs = []
     y_error = []
     for k, v in rewards.items():
-        if nb_events[k] > 1000:
+        if nb_events[k] > 10:
             ks.append(k)
             vs.append(v)
             y_error.append(nb_events[k])
@@ -517,4 +508,5 @@ def read_counter_results(id='', get_baseline=False, baseline=None):
         plt.plot(ks, np.ones(len(ks)) * baseline, label="avg reward = "+str(baseline))
 
     plt.legend()
-    plt.show()
+    print("saving graph in results")
+    plt.savefig("results/" + id + ".png")

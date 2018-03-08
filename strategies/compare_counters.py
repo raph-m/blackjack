@@ -1,4 +1,4 @@
-from strategies.naive_strategy import parallel_evaluate_counting_strategy
+from strategies.strategies import parallel_evaluate_counting_strategy
 import json
 from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2, ko, default_thorp, my_counter0, my_counter1
 import numpy as np
@@ -84,15 +84,29 @@ def compare_counters(n, number_of_decks, shuffle_every):
         names += famous_counters_names
         bs += [0] * len(famous_counters_names)
 
+    bet_mapping = {}
+    for j in range(-50, 50):
+        bet_mapping[j] = 1 if j >= 0 else 0
+
+    baseline = parallel_evaluate_counting_strategy(
+        strategy,
+        n,
+        bet_mapping,
+        number_of_decks=number_of_decks,
+        shuffle_every=shuffle_every,
+        bet_ratio=1,
+        number_of_players=1,
+        counter=PersonalizedCounter(hi_opt_1)
+    )
+
+    print("baseline is " + str(baseline))
+
     for bet_ratio in [10, 30, 100, 1000]:
+        print("bet ratio is now :"+str(bet_ratio))
         for i in range(len(names)):
             if names[i] in famous_counters_names:
-                with open("temp_results/nb_events" + names[i] + ".json") as fp:
-                    nb_events = json.load(fp)
                 with open("temp_results/rewards" + names[i] + ".json") as fp:
                     rewards = json.load(fp)
-                with open("temp_results/params" + names[i] + ".json") as fp:
-                    params = json.load(fp)
 
                 bet_mapping = {}
                 for j in range(-50, 50):
@@ -116,7 +130,7 @@ def compare_counters(n, number_of_decks, shuffle_every):
                 counter=PersonalizedCounter(ws[i])
             )
 
-            print("computing for counter: "+names[i])
+            print("computing for counter: " + names[i])
             print("with bet ratio = " + str(bet_ratio) + ", total reward is: " + str(r1))
             print()
 
