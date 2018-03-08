@@ -10,9 +10,49 @@ n = int(1e5)
 print("computing best naive strategy:")
 best_naive_strategy(n)
 
-# WIKI BASIC
-# TUNE strategy
+from util.tools import visualizePolicy
+from strategies.naive_strategy import save_base_policy
+from strategies.naive_strategy import parallel_expectancy
+save_base_policy() #to be run once
+#load the generated policy
+with open("strategy_generator/base_wiki_policy.json", "r") as fp:
+    wiki_pol = json.load(fp)
+visualizePolicy(wiki_pol)
+wiki_pol["name"] = "my_basic"
+wiki_pol["epochs"] = 1
 
+n_tries = int(1e6)
+print("expectancy for reference basic strategy:", parallel_expectancy(wiki_pol, n_tries))
+
+
+
+# implement dfo to find the best hyper parameters for MC and Q-learning
+# WARNING : Can take almost 16 hours to run, better load the already calculated parameters as shown bellow
+from strategy_tuning.dfo_tuning import tune
+tune("qlearn")
+# results: epsilon = 0.197, alpha = 0.0019, gamma = 0.959
+tune("MC")
+# results: epsilon = 0.01
+
+epochs = int(1e7) # a lower value does not alway permit to cover all the states
+# generate a policy with a Monte Carlo RL algorithm and Visualize it
+from strategy_generator.base_monte_carlo import MC
+with open("strategy_tuning/mc_hyper_parameters.json", "r") as fp:
+    hyp_mc = json.load(fp)
+mc_pol = MC(epochs=epochs, epsilon=hyp_mc["epsilon"])
+visualizePolicy(mc_pol)
+mc_pol["name"] = "my_basic"
+mc_pol["epochs"] = 1
+print("expectancy for Monte Carlo basic strategy:", parallel_expectancy(mc_pol, n_tries))
+
+from strategy_generator.base_qlearning import QLearn
+with open("strategy_tuning/qlearn_hyper_parameters.json", "r") as fp:
+    hyp_cl = json.load(fp)
+ql_pol = QLearn(epochs=epochs, epsilon=hyp_ql["epsilon"], alpha=hyp_ql["alpha"], gamma=hyp_ql["gamma"])
+visualizePolicy(ql_pol)
+ql_pol["name"] = "my_basic"
+ql_pol["epochs"] = 1
+print("expectancy for Q-learning basic strategy:", parallel_expectancy(ql_pol, n_tries))
 
 number_of_decks = [2, 2, 3, 4, 4, 6]
 shuffle_every = [52, 80, 104, 52, 104, 80]
@@ -89,22 +129,3 @@ print("this should take " + str(n * ratio / (60 * 60)) + " hours")
 compare_counters(n, 4, 52)
 end = time.time()
 print("done in: "+str((end-start) / (60 * 60)) + " hours")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

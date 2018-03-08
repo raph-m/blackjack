@@ -15,7 +15,7 @@ with open("strategy_tuning/"+str(epochs)+"_"+str(alpha)+".json", "w") as fp:
 # generate a policy with a Q learning algorithm
 from strategy_generator.base_qlearning import QLearn
 epochs = int(1e8)
-with open("strategy_generator/qlearn_hyper_parameters.json", "r") as fp:
+with open("strategy_tunning/qlearn_hyper_parameters.json", "r") as fp:
     hyp = json.load(fp)
 policy = QLearn(epochs=epochs, epsilon=hyp["epsilon"], alpha=hyp["alpha"], gamma=hyp["gamma"])
 policy["name"] = "my_basic"
@@ -27,7 +27,7 @@ policy["epochs"] = epochs
 # Load a strategy designed with n epochs
 epochs = 100000000
 alpha = 10
-with open("strategy_tuning/base_qlearn_policy_opt.json", "r") as fp:
+with open("strategy_generator/base_qlearn_policy_opt.json", "r") as fp:
     policy = json.load(fp)
 
 print(policy["soft.19.4"])
