@@ -147,7 +147,7 @@ def save_base_policy():
                     enc = state.split(".")
                     if int(enc[1]) != 0:
                         policy[state] = basic_strategy(player, dealer, None, True)
-    with open("strategy_tuning/base_wiki_policy.json", "w") as fp:
+    with open("strategy_generator/base_wiki_policy.json", "w") as fp:
         json.dump(policy, fp)
 
 
