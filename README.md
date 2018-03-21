@@ -9,7 +9,7 @@ Our project report is available in the results folder. You will be able to compu
 In the environment folder you can find the classes 'Dealer' and 'Deck'. You can find an example on how tu use them in the 'play_blackjack.py' file.
 
 ## Tools
-In the 'util/tools.py' file, you will find some useful tools for blackjack. For example, you can get the score of a hand or it's type (soft, hard, pair)
+In the 'util/tools.py' file, you will find some useful tools for blackjack. For example, you can get the score of a hand or it's type (soft, hard, pair).
 
 ## Strategies
 In the 'strategies/strategies.py' file you can find some implementations of strategies like the naive strategy (dealer-like strategy). You can also find some functions to evaluate strategies.
@@ -25,4 +25,7 @@ In the 'strategy_generator/base_qlearning.py' you can find the implementation of
 In the 'strategy_generator/base_monte_carlo.py' you can find the implementation of the Monte Carlo reinforcement algorithm. To run it, call the MC() function.
 
 ## Strategy Tuning
-In the 'strategy_tunning/dfo_tuning.py' file you can find the implementation of hyperparameters tuning usig DFO-TR algorithm. To run it, call tune("MC") or tune("qlearn")
+In the 'strategy_tunning/dfo_tuning.py' file you can find the implementation of hyperparameters tuning usig DFO-TR algorithm. To run it, call tune("MC") or tune("qlearn").
+
+## results
+You will find plots of the different basic strategies and of counters performance in the folder results.
