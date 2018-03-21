@@ -27,5 +27,5 @@ In the 'strategy_generator/base_monte_carlo.py' you can find the implementation 
 ## Strategy Tuning
 In the 'strategy_tunning/dfo_tuning.py' file you can find the implementation of hyperparameters tuning usig DFO-TR algorithm. To run it, call tune("MC") or tune("qlearn").
 
-## results
+## Results
 You will find plots of the different basic strategies and of counters performance in the folder results.
