@@ -10,7 +10,7 @@ from strategies.counters import PersonalizedCounter, hi_opt_1, hi_opt_2, omega_2
 n = int(1e5)  # TODO: you can reduce the values of n by a factor 10 if you want to obtain the results faster
 # TODO: but they will be less precise...
 print("computing best naive strategy:")
-best_naive_strategy(n)
+#best_naive_strategy(n)
 
 from util.tools import visualizePolicy
 from strategies.strategies import save_base_policy
